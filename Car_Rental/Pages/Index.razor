@@ -1,0 +1,62 @@
+﻿@page "/"
+@using Car_Rental.Business.Classes;
+@inject BookingProcessor bp;
+
+<PageTitle>Car Rental</PageTitle>
+
+
+@* *********************CUSTOMERS*********************** *@
+<h4>Customers</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">SSN</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Firts Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+            @foreach (var kund in bp.GetPersons())
+            {
+            <tr>
+                <th scope="row">@kund.Ssn</th>
+                <td>@kund.LastName</td>
+                <td>@kund.FirstName</td>
+            </tr>
+            }           
+        
+    </tbody>
+</table>
+
+@* *********************VEHICLES*********************** *@
+<h4>Vehicles</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">RegNo</th>
+            <th scope="col">Brand</th>
+            <th scope="col">Odometer</th>
+            <th scope="col">Cost/km</th>
+            <th scope="col">Vehicle Type</th>
+            <th scope="col">$/Day</th>
+            <th scope="col">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vehicle in bp.GetVehicles())
+        {
+            <tr>
+                <th scope="row">@vehicle.RegNo</th>
+                <td>@vehicle.Brand</td>
+                <td>@vehicle.Odometer</td>
+                <td>@vehicle.CostKm</td>
+                <td>@vehicle.VehicleType</td>
+                <td>@vehicle.CostDay</td>
+                <td>@vehicle.Status</td>
+            </tr>
+        }
+        
+    </tbody>
+</table>
+

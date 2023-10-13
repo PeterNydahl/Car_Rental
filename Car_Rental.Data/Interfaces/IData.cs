@@ -8,6 +8,7 @@ public interface IData
 {
     List<IPerson> GetPersons();
     List<IVehicle> GetVehicles(VehicleStatuses status = default);
+    List<IBooking> GetBookings();
 }
 
 

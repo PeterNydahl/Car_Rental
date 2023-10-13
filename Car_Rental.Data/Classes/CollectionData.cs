@@ -11,6 +11,7 @@ public class CollectionData : IData
 {
     readonly List<IPerson> _persons = new List<IPerson>();
     readonly List<IVehicle> _vehicles = new List<IVehicle>();
+    readonly List<IBooking> _bookings = new List<IBooking>();
 
     // TODO mata in i konstruktorn via SeedData istället
     public CollectionData() 
@@ -20,17 +21,21 @@ public class CollectionData : IData
         _persons.Add(new Customer() { Ssn = 54321, LastName = "Powell", FirstName = "Bud" });
 
         //adding vehicles
-        _vehicles.Add(new Car("ABC123", "Volvo", 10000, 1, (VehicleTypes)1, 200, (VehicleStatuses)2)); // 2 = Available
-        _vehicles.Add(new Car("DEF456", "Saab", 20000, 1, (VehicleTypes)0, 100, (VehicleStatuses)2));
-        _vehicles.Add(new Car("GHI789", "Tesla", 1000, 3, (VehicleTypes)0, 100, (VehicleStatuses)1)); // 2 = Available
-        _vehicles.Add(new Car("JKL012", "Jeep", 5000, 1.5, (VehicleTypes)2, 300, (VehicleStatuses)2)); // 2 = Available
-        _vehicles.Add(new Car("MNO234", "Yamaha", 30000, 0.5, (VehicleTypes)3, 50, (VehicleStatuses)2)); // 2 = Available
+        _vehicles.Add(new Car("ABC123", "Volvo", 10000, 1, (VehicleTypes)1, 200, VehicleStatuses.Available));
+        _vehicles.Add(new Car("DEF456", "Saab", 20000, 1, (VehicleTypes)0, 100, VehicleStatuses.Available));
+        _vehicles.Add(new Car("GHI789", "Tesla", 1000, 3, (VehicleTypes)0, 100, VehicleStatuses.Booked)); 
+        _vehicles.Add(new Car("JKL012", "Jeep", 5000, 1.5, (VehicleTypes)2, 300, VehicleStatuses.Available)); 
+        _vehicles.Add(new Car("MNO234", "Yamaha", 30000, 0.5, (VehicleTypes)3, 50, VehicleStatuses.Available)); 
+
+        //adding bookings
+        _bookings.Add(new Booking(_vehicles[2], _persons[0], new (2023, 09, 25)));
+        _bookings.Add(new Booking(_vehicles[3], _persons[1], new (2023, 09, 25)));
     }
     public List<IPerson> GetPersons() => _persons;
-    public List<IVehicle> GetVehicles(VehicleStatuses status = default) // TODO: lägg till funk så att du kan filtrera vilka bilar du vill komma åt
-    {
-        return _vehicles;
-    }
+    public List<IVehicle> GetVehicles(VehicleStatuses status = default) => _vehicles;
+    // TODO: lägg till funk så att du kan filtrera vilka bilar du vill komma åt
+    public List<IBooking> GetBookings() => _bookings;
+
 }
 
 

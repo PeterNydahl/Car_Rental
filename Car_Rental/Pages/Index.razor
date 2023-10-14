@@ -54,11 +54,13 @@
                 <td>@vehicle.VehicleType</td>
                 <td>@vehicle.CostDay</td>
                 <td>
-                    <span class="badge text-bg-dark">Dark</span>
-
+                    <span class="@((int)vehicle.Status == 1
+                        ? "badge rounded-pill bg-danger text-light"
+                        : "badge rounded-pill bg-dark text-light")"
+                    >@vehicle.Status</span>
                 </td>
             </tr>
-            //@vehicle.Status
+            @* badge rounded-pill bg - danger text - light : badge rounded-pill bg - dark text - light *@
         }
         
     </tbody>
@@ -90,10 +92,18 @@
                 <td>@customer.DayRentedOut</td>
                 <td>@customer.DayReturned</td>
                 <td>@customer.Cost</td>
-                <td>@customer.Status</td>
+                <td>
+                    <span class="@((int)customer.Status == 3
+                        ? "badge bg-danger text-light"
+                        : "badge bg-success text-light")">@customer.Status</span>
+                </td>
             </tr>
         }
 
     </tbody>
 </table>
 
+@code{
+    string message1 = "meddelande 1";
+    string message2 = "meddelande 2";
+}

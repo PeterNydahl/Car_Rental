@@ -26,9 +26,9 @@ public class Booking : IBooking
         KmRented = vehicle.Odometer;
         KmReturned = null;
         DayRentedOut = dayRentedOut;
-        DayReturned = null; 
         Cost = null;
         Status = vehicle.Status;
+        DayReturned = null;
     }
     //räknar ut kostnad när bilen lämnas tillbaka
     public void ReturnVehicle(int kmReturned)

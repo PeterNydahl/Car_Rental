@@ -6,7 +6,6 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Car_Rental.Data.Classes;
 
-// TEST
 public class CollectionData : IData
 {
     readonly List<IPerson> _persons = new List<IPerson>();

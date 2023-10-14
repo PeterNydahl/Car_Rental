@@ -13,10 +13,10 @@ public class CollectionData : IData
     readonly List<IVehicle> _vehicles = new List<IVehicle>();
     readonly List<IBooking> _bookings = new List<IBooking>();
 
-    // public CollectionData() => SeedData(); //Lägger till data till listorna
-    // TODO mata in i konstruktorn via SeedData istället
+    public CollectionData() => SeedData(); 
 
-    public CollectionData() 
+    // Metod som lägger till data till listorna
+    void SeedData()
     {
         //adding cutomers
         _persons.Add(new Customer() { Ssn = 12345, LastName = "Thelonius", FirstName = "Monk" });
@@ -33,6 +33,7 @@ public class CollectionData : IData
         _bookings.Add(new Booking(_vehicles[2], _persons[0], new (2023, 09, 25)));
         _bookings.Add(new Booking(_vehicles[3], _persons[1], new (2023, 09, 25)));
     }
+
     public IEnumerable<IPerson> GetPersons() => _persons;
     public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _vehicles;
     // TODO: lägg till funk så att du kan filtrera vilka bilar du vill komma åt

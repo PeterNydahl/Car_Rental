@@ -14,9 +14,11 @@ public class BookingProcessor //har inget interface eftersom vi inte ska byta ut
     public BookingProcessor(IData db) => _db = db;
 
     // Metoder
-    public List<IPerson> GetPersons() => _db.GetPersons(); //OBS! i beskrivningen står det Customer och inte IPerson
-    public List<IVehicle> GetVehicles(VehicleStatuses status = default) => _db.GetVehicles();
-    public List<IBooking> GetBookings()
+    public IEnumerable<IPerson> GetPersons() => _db.GetPersons(); //OBS! i beskrivningen står det Customer och inte IPerson
+    public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _db.GetVehicles();
+    
+    //ToDo: linqmetod istället nedan
+    public IEnumerable<IBooking> GetBookings()
     {
         foreach (IBooking b in _db.GetBookings())
         {

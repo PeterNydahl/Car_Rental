@@ -4,106 +4,102 @@
 
 <PageTitle>Car Rental</PageTitle>
 
-
 @* *********************CUSTOMERS*********************** *@
-<h4>Customers</h4>
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th scope="col">SSN</th>
-            <th scope="col">Last Name</th>
-            <th scope="col">Firts Name</th>
-        </tr>
-    </thead>
-    <tbody>
-        
-            @foreach (var kund in bp.GetPersons())
+<div class="container">
+    <h1>Nydahls Biluthyrning (G)</h1>
+    <h4>Customers</h4>
+    <table class="table table-hover border border-dark">
+        <thead>
+            <tr>
+                <th scope="col">SSN</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Firts Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var kund in bp.GetCustomers())
             {
             <tr>
-                <th scope="row">@kund.Ssn</th>
-                <td>@kund.LastName</td>
-                <td>@kund.FirstName</td>
+                 <th scope="row">@kund.Ssn</th>
+                 <td>@kund.LastName</td>
+                 <td>@kund.FirstName</td>
             </tr>
             }           
-        
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
 
 @* *********************VEHICLES*********************** *@
-<h4>Vehicles</h4>
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th scope="col">RegNo</th>
-            <th scope="col">Brand</th>
-            <th scope="col">Odometer</th>
-            <th scope="col">Cost/km</th>
-            <th scope="col">Vehicle Type</th>
-            <th scope="col">$/Day</th>
-            <th scope="col">Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var vehicle in bp.GetVehicles())
-        {
+<div class="container">
+    <h4>Vehicles</h4>
+    <table class="table table-hover border border-dark">
+        <thead>
             <tr>
-                <th scope="row">@vehicle.RegNo</th>
-                <td>@vehicle.Brand</td>
-                <td>@vehicle.Odometer</td>
-                <td>@vehicle.CostKm</td>
-                <td>@vehicle.VehicleType</td>
-                <td>@vehicle.CostDay</td>
-                <td>
-                    <span class="@((int)vehicle.Status == 1
-                        ? "badge rounded-pill bg-danger text-light"
-                        : "badge rounded-pill bg-dark text-light")"
-                    >@vehicle.Status</span>
-                </td>
+                <th scope="col">RegNo</th>
+                <th scope="col">Brand</th>
+                <th scope="col">Odometer</th>
+                <th scope="col">Cost/km</th>
+                <th scope="col">Vehicle Type</th>
+                <th scope="col">$/Day</th>
+                <th scope="col">Status</th>
             </tr>
-            @* badge rounded-pill bg - danger text - light : badge rounded-pill bg - dark text - light *@
-        }
+        </thead>
+        <tbody>
+            @foreach (var vehicle in bp.GetVehicles())
+            {
+                <tr>
+                    <th scope="row">@vehicle.RegNo</th>
+                    <td>@vehicle.Brand</td>
+                    <td>@vehicle.Odometer</td>
+                    <td>@vehicle.CostKm</td>
+                    <td>@vehicle.VehicleType</td>
+                    <td>@vehicle.CostDay</td>
+                    <td>
+                        <span class="@((int)vehicle.Status == 1
+                            ? "badge rounded-pill bg-danger text-light"
+                            : "badge rounded-pill bg-dark text-light")"
+                        >@vehicle.Status</span>
+                    </td>
+                </tr>
+            }
         
-    </tbody>
-</table>
-
+        </tbody>
+    </table>
+</div>
 @* *********************BOOKINGS*********************** *@
-<h4>Bookings</h4>
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th scope="col">RegNo</th>
-            <th scope="col">Customer</th>
-            <th scope="col">KmRented</th>
-            <th scope="col">KmReturned</th>
-            <th scope="col">Rented</th>
-            <th scope="col">Returned</th>
-            <th scope="col">Cost</th>
-            <th scope="col">Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var customer in bp.GetBookings())
-        {
+<div class="container">
+    <h4>Bookings</h4>
+    <table class="table table-hover border border-dark">
+        <thead>
             <tr>
-                <th scope="row">@customer.RegNo</th>
-                <td>@customer.NameWithSsn</td>
-                <td>@customer.KmRented</td>
-                <td>@customer.KmReturned</td>
-                <td>@customer.DayRentedOut</td>
-                <td>@customer.DayReturned</td>
-                <td>@customer.Cost</td>
-                <td>
-                    <span class="@((int)customer.Status == 3
-                        ? "badge bg-danger text-light"
-                        : "badge bg-success text-light")">@customer.Status</span>
-                </td>
+                <th scope="col">RegNo</th>
+                <th scope="col">Customer</th>
+                <th scope="col">KmRented</th>
+                <th scope="col">KmReturned</th>
+                <th scope="col">Rented</th>
+                <th scope="col">Returned</th>
+                <th scope="col">Cost</th>
+                <th scope="col">Status</th>
             </tr>
-        }
-
-    </tbody>
-</table>
-
-@code{
-    string message1 = "meddelande 1";
-    string message2 = "meddelande 2";
-}
+        </thead>
+        <tbody>
+            @foreach (var customer in bp.GetBookings())
+            {
+                <tr>
+                    <th scope="row">@customer.RegNo</th>
+                    <td>@customer.NameWithSsn</td>
+                    <td>@customer.KmRented</td>
+                    <td>@customer.KmReturned</td>
+                    <td>@customer.DayRentedOut</td>
+                    <td>@customer.DayReturned</td>
+                    <td>@customer.Cost</td>
+                    <td>
+                        <span class="@((int)customer.Status == 3
+                            ? "badge bg-danger text-light"
+                            : "badge bg-success text-light")">@customer.Status</span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

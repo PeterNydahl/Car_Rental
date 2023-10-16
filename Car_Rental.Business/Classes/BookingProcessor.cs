@@ -6,23 +6,29 @@ using System.Collections.Generic;
 
 namespace Car_Rental.Business.Classes;
 
-public class BookingProcessor //har inget interface eftersom vi inte ska byta ut den mot något annat
+public class BookingProcessor
 {
     private readonly IData _db;
 
-    // Konstruktor
     public BookingProcessor(IData db) => _db = db;
 
-    // Metoder
-    public IEnumerable<IPerson> GetPersons() => _db.GetPersons(); //OBS! i beskrivningen står det Customer och inte IPerson
+    public IEnumerable<Customer> GetCustomers()
+    {
+        List<Customer> customerList = new List<Customer>();
+       
+        foreach (var c in _db.GetPersons())
+            customerList.Add((Customer)c);
+
+        IEnumerable <Customer> newCustomerList = customerList;
+        return newCustomerList;
+    }
     public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _db.GetVehicles();
-    
-    //ToDo: linqmetod istället nedan
+   
     public IEnumerable<IBooking> GetBookings()
     {
         foreach (IBooking b in _db.GetBookings())
         {
-            if (b.Status == VehicleStatuses.Booked) 
+            if (b.Status == VehicleStatuses.Booked)
             {
                 b.Status = VehicleStatuses.Open; continue;
             }
@@ -33,15 +39,3 @@ public class BookingProcessor //har inget interface eftersom vi inte ska byta ut
         return _db.GetBookings();
     }
 }
-
-//internal class BookingProcessor //har inget interface eftersom vi inte ska byta ut den mot något annat
-//{
-//    private readonly IData _db;
-
-//    public BookingProcessor(IData db) => _db = db;
-
-//    // det är i nedanstående metoder som du kan lägg till nödvändig logik
-//    public IEnumerable<Customer> GetCustomers(); //...
-//    public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default); // så att du kan hämta de som är obokade eller bokade
-//    public IEnumerable<IBooking> GetBookings(); //...
-//}

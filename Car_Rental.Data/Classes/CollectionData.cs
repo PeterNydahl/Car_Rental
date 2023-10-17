@@ -19,18 +19,14 @@ public class CollectionData : IData
     {
         //adding cutomers
         _persons.Add(new Customer() { Ssn = 12345, LastName = "Thelonius", FirstName = "Monk" });
-        _persons.Add(new Customer() { Ssn = 54321, LastName = "Powell", FirstName = "Bud" });
+        _persons.Add(new Customer() { Ssn = 98765, LastName = "Powell", FirstName = "Bud" });
 
         //adding vehicles
-        _vehicles.Add(new Car("MNO234", "Yamaha", 30000, 0.5, (VehicleTypes)3, 50, VehicleStatuses.Available)); 
+        _vehicles.Add(new Motorcycle("MNO234", "Yamaha", 30000, 0.5, (VehicleTypes)3, 50, VehicleStatuses.Available)); 
         _vehicles.Add(new Car("ABC123", "Volvo", 10000, 1, (VehicleTypes)1, 200, VehicleStatuses.Available));
         _vehicles.Add(new Car("DEF456", "Saab", 20000, 1, (VehicleTypes)0, 100, VehicleStatuses.Available));
-        _vehicles.Add(new Car("GHI789", "Tesla", 1000, 3, (VehicleTypes)0, 100, VehicleStatuses.Booked)); 
-        _vehicles.Add(new Car("JKL012", "Jeep", 5000, 1.5, (VehicleTypes)2, 300, VehicleStatuses.Booked)); 
-
-        //adding bookings
-        _bookings.Add(new Booking(_vehicles[2], _persons[0], new (2023, 09, 25)));
-        _bookings.Add(new Booking(_vehicles[3], _persons[1], new (2023, 09, 25)));
+        _vehicles.Add(new Car("GHI789", "Tesla", 1000, 3, (VehicleTypes)0, 100, VehicleStatuses.Available)); 
+        _vehicles.Add(new Car("JKL012", "Jeep", 5000, 1.5, (VehicleTypes)2, 300, VehicleStatuses.Available)); 
     }
 
     public IEnumerable<IPerson> GetPersons() => _persons;

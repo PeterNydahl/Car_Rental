@@ -18,10 +18,6 @@ public interface IBooking
     public double? Cost { get; set; }
     public VehicleStatuses Status{ get; set; }
 
-
-    // metod som räknar ut km och kostnad
-    public void ReturnVehicle(int kmReturned);
-
 }
 
 

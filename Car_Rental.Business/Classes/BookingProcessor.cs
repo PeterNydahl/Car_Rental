@@ -8,34 +8,108 @@ namespace Car_Rental.Business.Classes;
 
 public class BookingProcessor
 {
-    private readonly IData _db;
+    //******************** fält/egenskaper ********************
+    readonly IData _db;
 
-    public BookingProcessor(IData db) => _db = db;
+    List<IVehicle> _vehicles = new();
+    List<IBooking> _bookedVehicles = new();
 
+    // ******************** konstruktor ********************
+    public BookingProcessor(IData db)
+    {
+        _db = db;
+        _vehicles.AddRange(_db.GetVehicles());
+
+        // skapa nya bokningar genom att anropa NewBooking
+        NewBooking("GHI789", 54321); // tesla, Bud
+        NewBooking("JKL012", 12345); // jeep, Monk
+        ReturnVehicle("JKL012", 6000);
+    }
+
+    // ******************** metoder ********************
+
+    // tar in lista med <IPerson> och returnerar lista med <Customer>
     public IEnumerable<Customer> GetCustomers()
     {
         List<Customer> customerList = new List<Customer>();
-       
+
         foreach (var c in _db.GetPersons())
             customerList.Add((Customer)c);
 
-        IEnumerable <Customer> newCustomerList = customerList;
+        IEnumerable<Customer> newCustomerList = customerList;
         return newCustomerList;
     }
-    public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _db.GetVehicles();
-   
-    public IEnumerable<IBooking> GetBookings()
+
+    // returnerar samtliga fordon
+    public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _vehicles;
+
+    // skapar en ny bokning
+    public void NewBooking(string regNr, int ssn)
     {
-        foreach (IBooking b in _db.GetBookings())
-        {
-            if (b.Status == VehicleStatuses.Booked)
-            {
-                b.Status = VehicleStatuses.Open; continue;
-            }
-            else if (b.Status == VehicleStatuses.Available)
-                b.Status = VehicleStatuses.Closed;
-                b.ReturnVehicle(6000);
-        }
-        return _db.GetBookings();
+        // lägger till kund
+        IPerson customer = _db.GetPersons().FirstOrDefault(c => c.Ssn == ssn);
+
+        // Initiera bokning & lägg till i lista. Sätter status till Open. Lägger in kunden. 
+        _bookedVehicles.Add(new Booking(_vehicles.First(v => v.RegNo == regNr), customer, new(2023, 10, 10), VehicleStatuses.Open));
+
+        // i _vehicles ändra status till Booked för fordonet
+        IVehicle updateVehicle = _vehicles.Find(v => v.RegNo == regNr);
+        updateVehicle.Status = VehicleStatuses.Booked;
     }
+
+    // (lämna tillbaka fordon) - gör uträkning och ändrar status
+    public void ReturnVehicle(string regNr, int kmReturned)
+    {
+        // leta upp fordonets som bokningen gäller
+        IVehicle vehicle = _vehicles.Find(v => v.RegNo == regNr);
+        // ändra status och odometer 
+        vehicle.Status = VehicleStatuses.Available;
+        vehicle.Odometer = kmReturned;
+
+        //leta upp bokningen som ska avslutas
+        IBooking booking = _bookedVehicles.Find(bv =>  bv.RegNo == regNr);
+        //ändra status till Closed
+        booking.Status = VehicleStatuses.Closed;
+        
+        // Gör uträkning
+        booking.Cost = 0;
+        booking.DayReturned = DateOnly.FromDateTime(DateTime.Now);
+        booking.KmReturned = kmReturned;
+
+        if (booking.KmReturned == null || booking.DayReturned == null || booking.Cost == null) return;
+
+        DateTime date1 = DateTime.Now;
+        //Konvertera datatyp för att möjliggöra beräkning av mellanskillnad i dagar.
+        DateTime date2 = booking.DayRentedOut.ToDateTime(TimeOnly.Parse("00:00:00"));
+
+        // Räkna ut mellanskillnad i dagar
+        TimeSpan duration = (TimeSpan)(date1 - date2);
+        double DifferenceInDays = duration.TotalDays;
+        int RentedDays = (int)Math.Round(DifferenceInDays, 0);
+        booking.Cost = RentedDays * vehicle.CostDay + (booking.KmReturned - booking.KmRented) * vehicle.CostKm;
+    }
+ 
+
+
+    public IEnumerable<IBooking> GetBookings() => _bookedVehicles;
+        // anropa returnedVehicle
+
+        // returnera _bookedVehicles
+
+        //foreach (IBooking b in _db.GetBookings())
+        //{
+        //    if (b.Status == VehicleStatuses.Booked)
+        //    {
+        //        b.Status = VehicleStatuses.Open; continue;
+        //    }
+        //    else if (b.Status == VehicleStatuses.Available)
+        //        b.Status = VehicleStatuses.Closed;
+        //        b.ReturnVehicle(6000);
+        //}
+        //return _db.GetBookings();
+
+    //metod ReturnVehicle() (finns redan...)
+    // --> Sätter ny odometer i vehicle listan när bilen lämnas tillbaka
+    // --> sätter status i vechicle listan till available
+
 }

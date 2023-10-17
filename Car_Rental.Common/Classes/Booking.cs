@@ -16,9 +16,11 @@ public class Booking : IBooking
     public double? Cost { get; set; }
     public VehicleStatuses Status { get; set; }
 
-    //Konstruktor
-    public Booking(IVehicle vehicle, IPerson customer, DateOnly dayRentedOut)
+    public Booking(IVehicle? vehicle, IPerson? customer, DateOnly dayRentedOut, VehicleStatuses status)
     {
+        // todo - uppdatera
+        if(customer is null || vehicle is null) return;
+
         this.vehicle = vehicle;
         NameWithSsn = $"{customer.FirstName} {customer.LastName}({customer.Ssn})";
 
@@ -27,28 +29,8 @@ public class Booking : IBooking
         KmReturned = null;
         DayRentedOut = dayRentedOut;
         Cost = null;
-        Status = vehicle.Status;
+        Status = status;
         DayReturned = null;
-    }
-    //räknar ut kostnad när bilen lämnas tillbaka
-    public void ReturnVehicle(int kmReturned)
-    {
-        Cost = 0;
-        DayReturned = DateOnly.FromDateTime(DateTime.Now);
-        KmReturned = kmReturned;
-
-        if (KmReturned == null || DayReturned == null || Cost == null) return;
-
-        DateTime date1 = DateTime.Now;
-        //Konvertera datatyp för att möjliggöra beräkning av mellanskillnad i dagar.
-        DateTime date2 = DayRentedOut.ToDateTime(TimeOnly.Parse("00:00:00"));
-
-        // Räkna ut mellanskillnad i dagar
-        TimeSpan duration = (TimeSpan)(date1 - date2);
-        double DifferenceInDays = duration.TotalDays;
-        int RentedDays = (int)Math.Round(DifferenceInDays, 0);
-        // räkna ut kostnad
-        Cost = RentedDays * vehicle.CostDay + (KmReturned - KmRented) * vehicle.CostKm;
     }
 
 }

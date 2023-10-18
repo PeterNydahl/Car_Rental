@@ -23,7 +23,7 @@ public class BookingProcessor
         // skapa nya bokningar genom att anropa NewBooking
         NewBooking("GHI789", 54321); // tesla, Bud
         NewBooking("JKL012", 12345); // jeep, Monk
-        ReturnVehicle("JKL012", 6000);
+        //ReturnVehicle("JKL012", 6000);
     }
 
     // ******************** metoder ********************
@@ -43,6 +43,8 @@ public class BookingProcessor
     // returnerar samtliga fordon
     public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _vehicles;
 
+    
+    
     // skapar en ny bokning
     public void NewBooking(string regNr, int ssn)
     {
@@ -56,6 +58,9 @@ public class BookingProcessor
         IVehicle updateVehicle = _vehicles.Find(v => v.RegNo == regNr);
         updateVehicle.Status = VehicleStatuses.Booked;
     }
+
+
+
 
     // (lämna tillbaka fordon) - gör uträkning och ändrar status
     public void ReturnVehicle(string regNr, int kmReturned)
@@ -88,28 +93,7 @@ public class BookingProcessor
         int RentedDays = (int)Math.Round(DifferenceInDays, 0);
         booking.Cost = RentedDays * vehicle.CostDay + (booking.KmReturned - booking.KmRented) * vehicle.CostKm;
     }
- 
-
 
     public IEnumerable<IBooking> GetBookings() => _bookedVehicles;
-        // anropa returnedVehicle
-
-        // returnera _bookedVehicles
-
-        //foreach (IBooking b in _db.GetBookings())
-        //{
-        //    if (b.Status == VehicleStatuses.Booked)
-        //    {
-        //        b.Status = VehicleStatuses.Open; continue;
-        //    }
-        //    else if (b.Status == VehicleStatuses.Available)
-        //        b.Status = VehicleStatuses.Closed;
-        //        b.ReturnVehicle(6000);
-        //}
-        //return _db.GetBookings();
-
-    //metod ReturnVehicle() (finns redan...)
-    // --> Sätter ny odometer i vehicle listan när bilen lämnas tillbaka
-    // --> sätter status i vechicle listan till available
-
+        
 }

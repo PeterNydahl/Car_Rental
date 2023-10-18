@@ -44,8 +44,6 @@ public class BookingProcessor
 
     // returnerar samtliga fordon
     public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _vehicles;
-
-    
     
     // skapar en ny bokning
     public void NewBooking(string regNr, int ssn)
@@ -63,15 +61,13 @@ public class BookingProcessor
     // (lämna tillbaka fordon) - gör uträkning och ändrar status
     public void ReturnVehicle(string regNr, int kmReturned)
     {
-        // leta upp fordonets som bokningen gäller
-        IVehicle? vehicle = _vehicles.Find(v => v.RegNo == regNr);
-        // ändra status och odometer 
+        // leta upp fordonets som bokningen gäller, ändra status och odometer
+        IVehicle? vehicle = _vehicles.Find(v => v.RegNo == regNr); 
         vehicle.Status = VehicleStatuses.Available;
         vehicle.Odometer = kmReturned;
 
-        //leta upp bokningen som ska avslutas
+        //leta upp bokningen som ska avslutas och ändra status
         IBooking? booking = _bookedVehicles.Find(bv => bv.RegNo == regNr);
-        //ändra status till Closed
         booking.Status = VehicleStatuses.Closed;
 
         // Gör uträkning

@@ -49,14 +49,18 @@ public class BookingProcessor
     public void NewBooking(string regNr, int ssn)
     {
         // lägger till kund
-        IPerson customer = _db.GetPersons().FirstOrDefault(c => c.Ssn == ssn);
+        
+        IPerson customer = _db.GetPersons().First(c => c?.Ssn == ssn);
 
         // Initiera bokning & lägg till i lista. Sätter status till Open. Lägger in kunden. 
         _bookedVehicles.Add(new Booking(_vehicles.First(v => v.RegNo == regNr), customer, new(2023, 10, 10), VehicleStatuses.Open));
 
         // i _vehicles ändra status till Booked för fordonet
-        IVehicle updateVehicle = _vehicles.Find(v => v.RegNo == regNr);
-        updateVehicle.Status = VehicleStatuses.Booked;
+        IVehicle updateVehicle = _vehicles.Find(v => v?.RegNo == regNr);
+        if (updateVehicle is not null)
+            updateVehicle.Status = VehicleStatuses.Booked;
+        else throw new Exception();
+
     }
 
 

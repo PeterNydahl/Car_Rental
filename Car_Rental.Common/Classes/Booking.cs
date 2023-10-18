@@ -8,8 +8,8 @@ public class Booking : IBooking
     //private IVehicle vehicle;
     //private IPerson customer;
     // testar att byta ut dessa fält mot props
-    public IVehicle vehicle { get; init; }
-    public IPerson customer { get; set; }
+    public IVehicle Vehicle { get; init; }
+    public IPerson Customer { get; set; }
 
 
     public string? RegNo { get; init; }
@@ -23,8 +23,9 @@ public class Booking : IBooking
 
     public Booking(IVehicle vehicle, IPerson customer, DateOnly dayRentedOut, VehicleStatuses status)
     {
-        this.vehicle = vehicle;
-        NameWithSsn = $"{customer.FirstName} {customer.LastName}({customer.Ssn})";
+        Vehicle = vehicle;
+        Customer = customer;
+        NameWithSsn = $"{Customer.FirstName} {Customer.LastName}({Customer.Ssn})";
 
         RegNo = vehicle.RegNo;
         KmRented = vehicle.Odometer;

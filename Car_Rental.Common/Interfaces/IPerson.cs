@@ -3,6 +3,6 @@
 public interface IPerson
 {
     public int Ssn { get; set; }
-    public string LastName { get; set; }
-    public string FirstName { get; set; }
+    public string? LastName { get; set; }
+    public string? FirstName { get; set; }
 }

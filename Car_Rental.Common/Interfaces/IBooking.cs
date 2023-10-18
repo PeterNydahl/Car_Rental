@@ -9,8 +9,8 @@ namespace Car_Rental.Common.Interfaces;
 
 public interface IBooking
 { 
-    public IVehicle vehicle { get; init; }
-    public IPerson customer { get; set; }
+    public IVehicle Vehicle { get; init; }
+    public IPerson Customer { get; set; }
 
     public string? RegNo { get; init; }
     public string? NameWithSsn { get; init; }

@@ -4,7 +4,7 @@ namespace Car_Rental.Common.Classes;
 
 public class Customer : IPerson
 {
-    public int Ssn { get; set; }
-    public string? LastName { get; set; }
-    public string? FirstName { get; set; }
+    public int Ssn { get; init; }
+    public string LastName { get; init; }
+    public string FirstName { get; init; }
 }

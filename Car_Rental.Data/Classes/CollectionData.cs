@@ -18,8 +18,8 @@ public class CollectionData : IData
     void SeedData()
     {
         //adding cutomers
-        _persons.Add(new Customer() { Ssn = 12345, LastName = "Thelonius", FirstName = "Monk" });
-        _persons.Add(new Customer() { Ssn = 98765, LastName = "Powell", FirstName = "Bud" });
+        _persons.Add(new Customer() { Ssn = 171010, LastName = "Thelonius", FirstName = "Monk" });
+        _persons.Add(new Customer() { Ssn = 240927, LastName = "Powell", FirstName = "Bud" });
 
         //adding vehicles
         _vehicles.Add(new Motorcycle("MNO234", "Yamaha", 30000, 0.5, (VehicleTypes)3, 50, VehicleStatuses.Available)); 

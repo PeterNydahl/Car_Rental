@@ -25,7 +25,7 @@ public class BookingProcessor
         // skapa nya bokningar genom att anropa NewBooking
         NewBooking("GHI789", 240927); // tesla, Bud
         NewBooking("JKL012", 171010); // jeep, Monk
-        //ReturnVehicle("JKL012", 6000);
+        ReturnVehicle("JKL012", 6000);
     }
 
     // ******************** metoder ********************
@@ -58,45 +58,38 @@ public class BookingProcessor
         if (updateVehicle is not null)
             updateVehicle.Status = VehicleStatuses.Booked;
         else throw new Exception();
-
     }
-
-    // uppdaterar status i listorna (fordon och kunder)
-    // kodkodkodkodkod
-
-
-
 
     // (lämna tillbaka fordon) - gör uträkning och ändrar status
     public void ReturnVehicle(string regNr, int kmReturned)
     {
-        //// leta upp fordonets som bokningen gäller
-        //IVehicle vehicle = _vehicles.Find(v => v.RegNo == regNr);
-        //// ändra status och odometer 
-        //vehicle.Status = VehicleStatuses.Available;
-        //vehicle.Odometer = kmReturned;
+        // leta upp fordonets som bokningen gäller
+        IVehicle? vehicle = _vehicles.Find(v => v.RegNo == regNr);
+        // ändra status och odometer 
+        vehicle.Status = VehicleStatuses.Available;
+        vehicle.Odometer = kmReturned;
 
-        ////leta upp bokningen som ska avslutas
-        //IBooking booking = _bookedVehicles.Find(bv =>  bv.RegNo == regNr);
-        ////ändra status till Closed
-        //booking.Status = VehicleStatuses.Closed;
-        
-        //// Gör uträkning
-        //booking.Cost = 0;
-        //booking.DayReturned = DateOnly.FromDateTime(DateTime.Now);
-        //booking.KmReturned = kmReturned;
+        //leta upp bokningen som ska avslutas
+        IBooking? booking = _bookedVehicles.Find(bv => bv.RegNo == regNr);
+        //ändra status till Closed
+        booking.Status = VehicleStatuses.Closed;
 
-        //if (booking.KmReturned == null || booking.DayReturned == null || booking.Cost == null) return;
+        // Gör uträkning
+        booking.Cost = 0;
+        booking.DayReturned = DateOnly.FromDateTime(DateTime.Now);
+        booking.KmReturned = kmReturned;
 
-        //DateTime date1 = DateTime.Now;
-        ////Konvertera datatyp för att möjliggöra beräkning av mellanskillnad i dagar.
-        //DateTime date2 = booking.DayRentedOut.ToDateTime(TimeOnly.Parse("00:00:00"));
+        if (booking.KmReturned == null || booking.DayReturned == null || booking.Cost == null) return;
 
-        //// Räkna ut mellanskillnad i dagar
-        //TimeSpan duration = (TimeSpan)(date1 - date2);
-        //double DifferenceInDays = duration.TotalDays;
-        //int RentedDays = (int)Math.Round(DifferenceInDays, 0);
-        //booking.Cost = RentedDays * vehicle.CostDay + (booking.KmReturned - booking.KmRented) * vehicle.CostKm;
+        DateTime date1 = DateTime.Now;
+        //Konvertera datatyp för att möjliggöra beräkning av mellanskillnad i dagar.
+        DateTime date2 = booking.DayRentedOut.ToDateTime(TimeOnly.Parse("00:00:00"));
+
+        // Räkna ut mellanskillnad i dagar
+        TimeSpan duration = (TimeSpan)(date1 - date2);
+        double DifferenceInDays = duration.TotalDays;
+        int RentedDays = (int)Math.Round(DifferenceInDays, 0);
+        booking.Cost = RentedDays * vehicle.CostDay + (booking.KmReturned - booking.KmRented) * vehicle.CostKm;
     }
 
     public IEnumerable<IBooking> GetBookings() => _bookedVehicles;

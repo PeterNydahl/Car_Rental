@@ -3,19 +3,22 @@ using Car_Rental.Common.Enums;
 using Car_Rental.Common.Interfaces;
 using Car_Rental.Data.Interfaces;
 using System.Collections.Generic;
+using System.Security.AccessControl;
 
 namespace Car_Rental.Business.Classes;
 
 public class BookingProcessor
 {
-    //******************** fält/egenskaper ********************
+    #region ************* EGENSKAPER *************
+
     readonly IData _db;
 
     List<IVehicle> _vehicles = new();
     List<IBooking> _bookedVehicles = new();
     List<IPerson> _customers = new();
+    #endregion
 
-    // ******************** konstruktor ********************
+    #region ************* KONSTRUKTOR *************
     public BookingProcessor(IData db)
     {
         _db = db;
@@ -27,10 +30,11 @@ public class BookingProcessor
         NewBooking("JKL012", 171010); // jeep, Monk
         ReturnVehicle("JKL012", 6000);
     }
+    #endregion
 
-    // ******************** metoder ********************
+    #region ************* METODER *************
 
-    // tar in lista med <IPerson> och returnerar lista med <Customer>
+    // returnerar kunder
     public IEnumerable<Customer> GetCustomers()
     {
         List<Customer> customerList = new List<Customer>();
@@ -42,9 +46,12 @@ public class BookingProcessor
         return newCustomerList;
     }
 
-    // returnerar samtliga fordon
-    public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _vehicles;
-    
+    // returnerar fordon
+    public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _vehicles.OrderBy(r => r.RegNo);
+
+    // returnerar bokningar
+    public IEnumerable<IBooking> GetBookings() => _bookedVehicles.OrderBy(b => b.RegNo);
+
     // skapar en ny bokning
     public void NewBooking(string regNr, int ssn)
     {
@@ -87,7 +94,5 @@ public class BookingProcessor
         int RentedDays = (int)Math.Round(DifferenceInDays, 0);
         booking.Cost = RentedDays * vehicle.CostDay + (booking.KmReturned - booking.KmRented) * vehicle.CostKm;
     }
-
-    public IEnumerable<IBooking> GetBookings() => _bookedVehicles;
-        
+    #endregion
 }

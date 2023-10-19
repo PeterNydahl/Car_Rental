@@ -2,8 +2,6 @@
 using Car_Rental.Common.Interfaces;
 
 namespace Car_Rental.Data.Interfaces;
-
-//TEST
 public interface IData
 {
     IEnumerable<IPerson> GetPersons();

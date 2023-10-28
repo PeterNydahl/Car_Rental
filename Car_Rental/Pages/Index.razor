@@ -5,47 +5,60 @@
 
 <PageTitle>Car Rental</PageTitle>
 
-@* *********************CUSTOMERS*********************** *@
-<div class="container">
-    <h1>Nydahls Biluthyrning (G)</h1>
-    <h4>Customers</h4>
-    <table class="table table-hover border border-dark">
-        <thead>
-            <tr>
-                <th scope="col">SSN</th>
-                <th scope="col">Last Name</th>
-                <th scope="col">Firts Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var kund in bp.GetCustomers())
-            {
-            <tr>
-                 <th scope="row">@kund.Ssn</th>
-                 <td>@kund.LastName</td>
-                 <td>@kund.FirstName</td>
-            </tr>
-            }           
-        </tbody>
-    </table>
-</div>
 
 @* *********************VEHICLES*********************** *@
 <div class="container">
+    <h1>Nydahls Biluthyrning (VG)</h1>
     <h4>Vehicles</h4>
     <table class="table table-hover border border-dark">
         <thead>
-            <tr>
+            <tr class="table-dark">
                 <th scope="col">RegNo</th>
                 <th scope="col">Brand</th>
                 <th scope="col">Odometer</th>
                 <th scope="col">Cost/km</th>
                 <th scope="col">Vehicle Type</th>
                 <th scope="col">$/Day</th>
+                <th scope="col">Action</th>
                 <th scope="col">Status</th>
             </tr>
         </thead>
         <tbody>
+            @*User Input*@
+            <tr>
+                <th scope="col">
+                    <input type="text" class="form-control" placeholder="Reg Nr" aria-label="Username" aria-describedby="basic-addon1">
+                </th>
+                <th scope="col">
+                    <input type="text" class="form-control" placeholder="Brand" aria-label="Username" aria-describedby="basic-addon1">
+                </th>
+                <th scope="col">
+                    <input type="text" class="form-control" placeholder="Odometer" aria-label="Username" aria-describedby="basic-addon1">
+                </th>
+                <th scope="col">
+                    <input type="text" class="form-control" placeholder="Cost/km" aria-label="Username" aria-describedby="basic-addon1">
+                </th>
+                <th scope="col">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown button
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </div>
+                </th>
+                <th scope="col"></th>
+                <th scope="col">
+                    <button type="button" class="btn btn-outline-success">Add</button>
+                </th>
+                <th scope="col"></th>
+            </tr>
+
+
+            @*Visar urvalet av bilar*@
             @foreach (var vehicle in bp.GetVehicles())
             {
                 <tr>
@@ -55,6 +68,10 @@
                     <td>@vehicle.CostKm</td>
                     <td>@vehicle.VehicleType</td>
                     <td>@vehicle.CostDay</td>
+                    @{
+                        //TODO:Dropdown meny och "rent" - knapp
+                    }
+                    <td></td>
                     <td>
                         <span class="@(vehicle.Status == VehicleStatuses.Booked
                             ? "badge rounded-pill bg-danger text-light"
@@ -72,7 +89,7 @@
     <h4>Bookings</h4>
     <table class="table table-hover border border-dark">
         <thead>
-            <tr>
+            <tr class="table-dark">
                 <th scope="col">RegNo</th>
                 <th scope="col">Customer</th>
                 <th scope="col">KmRented</th>
@@ -101,6 +118,30 @@
                     </td>
                 </tr>
             }
+        </tbody>
+    </table>
+</div>
+
+@* *********************CUSTOMERS*********************** *@
+<div class="container">
+    <h4>Customers</h4>
+    <table class="table table-hover border border-dark">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">SSN</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Firts Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var kund in bp.GetCustomers())
+            {
+            <tr>
+                 <th scope="row">@kund.Ssn</th>
+                 <td>@kund.LastName</td>
+                 <td>@kund.FirstName</td>
+            </tr>
+            }           
         </tbody>
     </table>
 </div>

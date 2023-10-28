@@ -4,6 +4,7 @@ using Car_Rental.Common.Interfaces;
 using Car_Rental.Data.Interfaces;
 using System.Collections.Generic;
 using System.Security.AccessControl;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Car_Rental.Business.Classes;
 
@@ -34,17 +35,9 @@ public class BookingProcessor
 
     #region ************* METODER *************
 
-    // returnerar kunder
-    public IEnumerable<Customer> GetCustomers()
-    {
-        List<Customer> customerList = new List<Customer>();
-
-        foreach (var c in _db.GetPersons())
-            customerList.Add((Customer)c);
-
-        IEnumerable<Customer> newCustomerList = customerList;
-        return newCustomerList;
-    }
+    // TODO: lägg eventuellt till en till metod i kedjan .ToList() som magistern gjorde. Nödvändigt?
+    // returnerar kunder 
+    public IEnumerable<Customer> GetCustomers() => _db.GetPersons().Cast<Customer>(); 
 
     // returnerar fordon
     public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _vehicles.OrderBy(r => r.RegNo);

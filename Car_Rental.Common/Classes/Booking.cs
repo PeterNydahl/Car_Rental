@@ -27,7 +27,7 @@ public class Booking : IBooking
         Customer = customer;
         NameWithSsn = $"{Customer.FirstName} {Customer.LastName}({Customer.Ssn})";
 
-        RegNo = vehicle.RegNo;
+        RegNo = Vehicle.RegNo;
         KmRented = vehicle.Odometer;
         KmReturned = null;
         DayRentedOut = dayRentedOut;

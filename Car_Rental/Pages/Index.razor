@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using Car_Rental.Business.Classes;
+@using Car_Rental.Common.Enums;
 @inject BookingProcessor bp;
 
 <PageTitle>Car Rental</PageTitle>
@@ -55,7 +56,7 @@
                     <td>@vehicle.VehicleType</td>
                     <td>@vehicle.CostDay</td>
                     <td>
-                        <span class="@((int)vehicle.Status == 1
+                        <span class="@(vehicle.Status == VehicleStatuses.Booked
                             ? "badge rounded-pill bg-danger text-light"
                             : "badge rounded-pill bg-dark text-light")"
                         >@vehicle.Status</span>

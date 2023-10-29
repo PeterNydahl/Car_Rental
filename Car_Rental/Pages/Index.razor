@@ -5,12 +5,14 @@
 
 <PageTitle>Car Rental</PageTitle>
 
-
+@{//TODO: lägg till en föräldra-div till allt för att kunna kontrollera storlek på child-divs.
+}
 @* *********************VEHICLES*********************** *@
 <div class="container">
     <h1>Nydahls Biluthyrning (VG)</h1>
     <h4>Vehicles</h4>
     <table class="table table-hover border border-dark">
+        @*Visar kategorier (table header)*@
         <thead>
             <tr class="table-dark">
                 <th scope="col">RegNo</th>
@@ -24,7 +26,7 @@
             </tr>
         </thead>
         <tbody>
-            @*User Input*@
+            @*User input - Lägg till nytt fordon*@
             <tr>
                 <th scope="col">
                     <input type="text" class="form-control" placeholder="Reg Nr" aria-label="Username" aria-describedby="basic-addon1">
@@ -40,8 +42,8 @@
                 </th>
                 <th scope="col">
                     <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Dropdown button
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Vehicle Type
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#">Action</a></li>
@@ -52,13 +54,12 @@
                 </th>
                 <th scope="col"></th>
                 <th scope="col">
-                    <button type="button" class="btn btn-outline-success">Add</button>
+                    <button type="button" class="btn btn-outline-success">Add Vehicle</button>
                 </th>
                 <th scope="col"></th>
             </tr>
 
-
-            @*Visar urvalet av bilar*@
+            @*Läser in och visar urvalet av bilar*@
             @foreach (var vehicle in bp.GetVehicles())
             {
                 <tr>
@@ -67,11 +68,20 @@
                     <td>@vehicle.Odometer</td>
                     <td>@vehicle.CostKm</td>
                     <td>@vehicle.VehicleType</td>
-                    <td>@vehicle.CostDay</td>
-                    @{
-                        //TODO:Dropdown meny och "rent" - knapp
-                    }
-                    <td></td>
+                    <td>@vehicle.CostDay</td>                   
+                    <td class="d-flex">
+                        <div class="dropdown">
+                            <button class="btn btn-light dropdown-toggle me-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Customer
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-outline-primary">Rent</button>
+                    </td>
                     <td>
                         <span class="@(vehicle.Status == VehicleStatuses.Booked
                             ? "badge rounded-pill bg-danger text-light"
@@ -134,6 +144,19 @@
             </tr>
         </thead>
         <tbody>
+            @*User input - lägg till kund*@
+            <tr>
+                <td scope="col">
+                    <input type="text" class="form-control" placeholder="SSN" aria-label="Username" aria-describedby="basic-addon1">
+                </td>
+                <td scope="col">
+                    <input type="text" class="form-control" placeholder="Last Name" aria-label="Username" aria-describedby="basic-addon1">
+                </td>
+                <td scope="col" class="d-flex">
+                    <input type="text" class="form-control me-2" placeholder="First Name" aria-label="Username" aria-describedby="basic-addon1">
+                    <button type="button" class="btn btn-outline-success">Add</button>
+                </td>
+            </tr>
             @foreach (var kund in bp.GetCustomers())
             {
             <tr>

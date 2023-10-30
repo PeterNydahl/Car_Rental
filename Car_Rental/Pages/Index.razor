@@ -41,16 +41,13 @@
                     <input type="text" class="form-control" placeholder="Cost/km" aria-label="Username" aria-describedby="basic-addon1">
                 </th>
                 <th scope="col">
-                    <div class="dropdown">
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Vehicle Type
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
-                    </div>
+                    <select class="form-select" aria-label="Default select example">
+                        <option selected></option>
+                        @foreach (var v in bp.VehicleTypes)
+                        {
+                            <option value="@v">@v</option>
+                        }
+                    </select>
                 </th>
                 <th scope="col"></th>
                 <th scope="col">
@@ -70,16 +67,13 @@
                     <td>@vehicle.VehicleType</td>
                     <td>@vehicle.CostDay</td>                   
                     <td class="d-flex">
-                        <div class="dropdown">
-                            <button class="btn btn-light dropdown-toggle me-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Customer
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </div>
+                        <select class="form-select" aria-label="Default select example">
+                            <option selected></option>
+                            @foreach (var v in bp.GetCustomers())
+                            {
+                                <option value="@v">@v.LastName @v.FirstName</option>
+                            }
+                        </select>
                         <button class="btn btn-outline-primary">Rent</button>
                     </td>
                     <td>

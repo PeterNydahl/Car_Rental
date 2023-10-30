@@ -18,7 +18,7 @@ public class CollectionData : IData
     void SeedData()
     {
         //adding cutomers
-        _persons.Add(new Customer() { Ssn = 171010, LastName = "Thelonius", FirstName = "Monk" });
+        _persons.Add(new Customer() { Ssn = 171010, LastName = "Monk", FirstName = "Thelonius" });
         _persons.Add(new Customer() { Ssn = 240927, LastName = "Powell", FirstName = "Bud" });
 
         //adding vehicles

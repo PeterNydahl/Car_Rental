@@ -10,13 +10,16 @@ namespace Car_Rental.Business.Classes;
 
 public class BookingProcessor
 {
-    #region ************* EGENSKAPER *************
+    #region ************* FÄLT & EGENSKAPER *************
 
     readonly IData _db;
 
     List<IVehicle> _vehicles = new();
     List<IBooking> _bookedVehicles = new();
     List<IPerson> _customers = new();
+
+    public VehicleTypes[] VehicleTypes { get; init; }
+
     #endregion
 
     #region ************* KONSTRUKTOR *************
@@ -25,6 +28,7 @@ public class BookingProcessor
         _db = db;
         _vehicles.AddRange(_db.GetVehicles());
         _customers.AddRange(_db.GetPersons());
+        VehicleTypes = (VehicleTypes[])Enum.GetValues(typeof(VehicleTypes));
 
         // skapa nya bokningar genom att anropa NewBooking
         NewBooking("GHI789", 240927); // tesla, Bud
@@ -35,7 +39,7 @@ public class BookingProcessor
 
     #region ************* METODER *************
 
-    // TODO: lägg eventuellt till en till metod i kedjan .ToList() som magistern gjorde. Nödvändigt?
+    
     // returnerar kunder 
     public IEnumerable<Customer> GetCustomers() => _db.GetPersons().Cast<Customer>(); 
 

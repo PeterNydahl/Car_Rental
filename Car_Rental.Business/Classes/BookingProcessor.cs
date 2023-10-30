@@ -26,8 +26,6 @@ public class BookingProcessor
     public BookingProcessor(IData db)
     {
         _db = db;
-        //_vehicles.AddRange(_db.GetVehicles());
-        //_customers.AddRange(_db.GetPersons());
         VehicleTypes = (VehicleTypes[])Enum.GetValues(typeof(VehicleTypes));
 
         // skapa nya bokningar genom att anropa NewBooking
@@ -39,33 +37,24 @@ public class BookingProcessor
 
     #region ************* METODER *************
 
-    #region Metoder som lägger till kunder och fordon
-    // Metod som lägger till en kund
+    #region Metoder som lägger till
+    // Metod som lägger till ny kund
     public void AddCustomer(int ssn, string lastName, string firstName)
     {
         _db.AddCustomer(new Customer() { Ssn = ssn, LastName = lastName, FirstName = firstName });
     }
     #endregion
 
-    #region Metoder som sköter bokning
-    // skapar en ny bokning
+    #region Metoder som sköter bokningar
     public void NewBooking(string regNr, int ssn)
     {
         // skapar en bokning
         Customer customer = (Customer)_db.GetPersons().First(c => c.Ssn == ssn);
-        //_bookedVehicles.Add(new Booking(_vehicles.First(v => v.RegNo == regNr), customer, new(2023, 10, 10), VehicleStatuses.Open));
-        //_bookedVehicles.Add(new Booking(_db.GetVehicles().First(v => v.RegNo == regNr), customer, new(2023, 10, 10), VehicleStatuses.Open));
-
         _db.AddBooking(new Booking(_db.GetVehicles().First(v => v.RegNo == regNr), customer, new(2023, 10, 10), VehicleStatuses.Open));
-        //new Booking(_db.GetVehicles().First(v => v.RegNo == regNr), customer, new(2023, 10, 10), VehicleStatuses.Open);
-        // i _vehicles ändra status till Booked för fordonet i Vehicle-lista
-        //IVehicle? updateVehicle = _vehicles.Find(v => v.RegNo == regNr);
+
+        // Ändrar status till Booked för fordonet i Vehicle-lista
         IVehicle updateVehicle = _db.GetVehicles().First(v => v.RegNo == regNr);
         updateVehicle.Status = VehicleStatuses.Booked;
-
-        //if (updateVehicle is not null)
-        //    updateVehicle.Status = VehicleStatuses.Booked;
-        //else throw new Exception();
     }
 
     // (lämna tillbaka fordon) - gör uträkning och ändrar status
@@ -77,7 +66,6 @@ public class BookingProcessor
         vehicle.Odometer = kmReturned;
 
         //leta upp bokningen som ska avslutas och ändra status
-        //IBooking? booking = _bookedVehicles.First(bv => bv.RegNo == regNr);
         IBooking? booking = _db.GetBookings().First(bv => bv.RegNo == regNr);
         booking.Status = VehicleStatuses.Closed;
 
@@ -100,12 +88,11 @@ public class BookingProcessor
     }
     #endregion
 
-    #region Metoder som returnerar kunder, fordon, bokningar
+    #region Metoder som returnerar
     // returnerar kunder 
     public IEnumerable<Customer> GetCustomers() => _db.GetPersons().Cast<Customer>();
 
     // returnerar fordon
-    //public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _vehicles.OrderBy(r => r.RegNo);
     public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _db.GetVehicles();
 
     // returnerar bokningar

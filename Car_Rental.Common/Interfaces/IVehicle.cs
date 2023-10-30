@@ -10,7 +10,7 @@ public interface IVehicle
 
     public double CostKm { get; init; }
 
-    public VehicleTypes VehicleType { get; init; }
+    public string VehicleType { get; init; }
 
     public int CostDay { get; set; }
 

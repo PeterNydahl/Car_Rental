@@ -12,7 +12,7 @@ public class CollectionData : IData
     readonly List<IVehicle> _vehicles = new List<IVehicle>();
     readonly List<IBooking> _bookings = new List<IBooking>();
 
-    string[] _vehicleTypes = (string[])Enum.GetNames(typeof(VehicleTypes));
+    string[] _vehicleTypes = Enum.GetNames(typeof(VehicleTypes));
     public CollectionData() => SeedData(); 
 
     // Metod som lägger till data till listorna
@@ -23,11 +23,11 @@ public class CollectionData : IData
         _persons.Add(new Customer() { Ssn = 240927, LastName = "Powell", FirstName = "Bud" });
 
         //adding vehicles
-        _vehicles.Add(new Motorcycle("MNO234", "Yamaha", 30000, 0.5, (VehicleTypes)3, 50, VehicleStatuses.Available)); 
-        _vehicles.Add(new Car("ABC123", "Volvo", 10000, 1, (VehicleTypes)1, 200, VehicleStatuses.Available));
-        _vehicles.Add(new Car("DEF456", "Saab", 20000, 1, (VehicleTypes)0, 100, VehicleStatuses.Available));
-        _vehicles.Add(new Car("GHI789", "Tesla", 1000, 3, (VehicleTypes)0, 100, VehicleStatuses.Available)); 
-        _vehicles.Add(new Car("JKL012", "Jeep", 5000, 1.5, (VehicleTypes)2, 300, VehicleStatuses.Available)); 
+        _vehicles.Add(new Motorcycle("MNO234", "Yamaha", 30000, 0.5, _vehicleTypes[3], 50, VehicleStatuses.Available)); 
+        _vehicles.Add(new Car("ABC123", "Volvo", 10000, 1, _vehicleTypes[1], 200, VehicleStatuses.Available));
+        _vehicles.Add(new Car("DEF456", "Saab", 20000, 1, _vehicleTypes[0], 100, VehicleStatuses.Available));
+        _vehicles.Add(new Car("GHI789", "Tesla", 1000, 3, _vehicleTypes[0], 100, VehicleStatuses.Available)); 
+        _vehicles.Add(new Car("JKL012", "Jeep", 5000, 1.5, _vehicleTypes[2], 300, VehicleStatuses.Available)); 
     }
 
     #region ********* METODER *********

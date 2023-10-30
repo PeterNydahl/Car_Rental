@@ -11,13 +11,13 @@ public class Motorcycle : IVehicle
 
     public double CostKm { get; init; }
 
-    public VehicleTypes VehicleType { get; init; }
+    public string VehicleType { get; init; }
 
     public int CostDay { get; set; }
 
     public VehicleStatuses Status { get; set; }
 
-    public Motorcycle(string RegNo, string Brand, int Odometer, double CostKm, VehicleTypes VehicleType, int CostDay, VehicleStatuses Status)
+    public Motorcycle(string RegNo, string Brand, int Odometer, double CostKm, string VehicleType, int CostDay, VehicleStatuses Status)
     {
         this.RegNo = RegNo;
         this.Brand = Brand;

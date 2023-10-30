@@ -141,13 +141,13 @@
             @*User input - lägg till kund*@
             <tr>
                 <td scope="col">
-                    <input type="text" class="form-control" placeholder="SSN" aria-label="Username" aria-describedby="basic-addon1">
+                    <input @bind="ssn" type="text" class="form-control" placeholder="SSN" aria-label="Username" aria-describedby="basic-addon1">
                 </td>
                 <td scope="col">
-                    <input type="text" class="form-control" placeholder="Last Name" aria-label="Username" aria-describedby="basic-addon1">
+                    <input @bind="lastName" type="text" class="form-control" placeholder="Last Name" aria-label="Username" aria-describedby="basic-addon1">
                 </td>
                 <td scope="col" class="d-flex">
-                    <input type="text" class="form-control me-2" placeholder="First Name" aria-label="Username" aria-describedby="basic-addon1">
+                    <input @bind="firstName" type="text" class="form-control me-2" placeholder="First Name" aria-label="Username" aria-describedby="basic-addon1">
                     <button type="button" @onclick="() => bp.AddCustomer(ssn, lastName, firstName)" class="btn btn-outline-success">Add</button>
                 </td>
             </tr>
@@ -162,13 +162,9 @@
         </tbody>
     </table>
 </div>
-@foreach (var c in bp.GetCustomers())
-{
-    <p>@c.FirstName</p>
-}
 
 @code{
-    int ssn = 820825;
-    string lastName = "Nydahl";
-    string firstName = "Peter";
+    int ssn;
+    string lastName = string.Empty;
+    string firstName = string.Empty;
 }

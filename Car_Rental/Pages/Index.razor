@@ -148,7 +148,7 @@
                 </td>
                 <td scope="col" class="d-flex">
                     <input type="text" class="form-control me-2" placeholder="First Name" aria-label="Username" aria-describedby="basic-addon1">
-                    <button type="button" class="btn btn-outline-success">Add</button>
+                    <button type="button" @onclick="() => bp.AddCustomer(ssn, lastName, firstName)" class="btn btn-outline-success">Add</button>
                 </td>
             </tr>
             @foreach (var kund in bp.GetCustomers())
@@ -162,3 +162,13 @@
         </tbody>
     </table>
 </div>
+@foreach (var c in bp.GetCustomers())
+{
+    <p>@c.FirstName</p>
+}
+
+@code{
+    int ssn = 820825;
+    string lastName = "Nydahl";
+    string firstName = "Peter";
+}

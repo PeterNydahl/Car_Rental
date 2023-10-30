@@ -39,16 +39,15 @@ public class BookingProcessor
 
     #region ************* METODER *************
 
-    
-    // returnerar kunder 
-    public IEnumerable<Customer> GetCustomers() => _db.GetPersons().Cast<Customer>(); 
+    #region Metoder som lägger till kunder och fordon
+    // Metod som lägger till en kund
+    public void AddCustomer(int ssn, string lastName, string firstName)
+    {
+        _customers.Add(new Customer() { Ssn = ssn, LastName = lastName, FirstName = firstName });
+    }
+    #endregion
 
-    // returnerar fordon
-    public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _vehicles.OrderBy(r => r.RegNo);
-
-    // returnerar bokningar
-    public IEnumerable<IBooking> GetBookings() => _bookedVehicles.OrderBy(b => b.RegNo);
-
+    #region Metoder som sköter bokning
     // skapar en ny bokning
     public void NewBooking(string regNr, int ssn)
     {
@@ -92,4 +91,17 @@ public class BookingProcessor
         booking.Cost = RentedDays * vehicle.CostDay + (booking.KmReturned - booking.KmRented) * vehicle.CostKm;
     }
     #endregion
+
+    #region Metoder som eturnerar kunder, fordon, bokningar
+    // returnerar kunder 
+    public IEnumerable<Customer> GetCustomers() => _db.GetPersons().Cast<Customer>();
+
+    // returnerar fordon
+    public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _vehicles.OrderBy(r => r.RegNo);
+
+    // returnerar bokningar
+    public IEnumerable<IBooking> GetBookings() => _bookedVehicles.OrderBy(b => b.RegNo);
+    #endregion
+
+    #endregion METODER REGION ENDS
 }

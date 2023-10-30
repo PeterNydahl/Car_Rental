@@ -29,8 +29,24 @@ public class CollectionData : IData
         _vehicles.Add(new Car("JKL012", "Jeep", 5000, 1.5, (VehicleTypes)2, 300, VehicleStatuses.Available)); 
     }
 
+    #region ********* METODER *********
+
+    #region Metoder som lägger till data
+    public void AddBooking(IBooking newBooking)
+    {
+        _bookings.Add(newBooking);
+    }
+    public void AddCustomer(Customer newCustomer)
+    {
+        _persons.Add(newCustomer);
+    }
+    #endregion
+
+    #region Metoder som returnerar data
     public IEnumerable<IPerson> GetPersons() => _persons;
     public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _vehicles;
     public IEnumerable<IBooking> GetBookings() => _bookings;
+    #endregion
 
+    #endregion REGION METODER ENDS
 }

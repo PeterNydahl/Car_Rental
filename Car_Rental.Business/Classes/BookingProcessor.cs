@@ -18,6 +18,7 @@ public class BookingProcessor
     List<IBooking> _bookedVehicles = new();
     List<IPerson> _customers = new();
 
+
     public VehicleTypes[] VehicleTypes { get; init; }
 
     #endregion

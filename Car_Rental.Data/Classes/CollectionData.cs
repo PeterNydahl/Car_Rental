@@ -12,6 +12,7 @@ public class CollectionData : IData
     readonly List<IVehicle> _vehicles = new List<IVehicle>();
     readonly List<IBooking> _bookings = new List<IBooking>();
 
+    string[] _vehicleTypes = (string[])Enum.GetNames(typeof(VehicleTypes));
     public CollectionData() => SeedData(); 
 
     // Metod som lägger till data till listorna
@@ -46,6 +47,7 @@ public class CollectionData : IData
     public IEnumerable<IPerson> GetPersons() => _persons;
     public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _vehicles;
     public IEnumerable<IBooking> GetBookings() => _bookings;
+    public string[] GetVehicleTypes() => _vehicleTypes;   
     #endregion
 
     #endregion REGION METODER ENDS

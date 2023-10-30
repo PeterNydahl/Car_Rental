@@ -14,11 +14,7 @@ public class BookingProcessor
 
     readonly IData _db;
 
-    //List<IVehicle> _vehicles = new();
-    //List<IBooking> _bookedVehicles = new();
-    //List<IPerson> _customers = new();
-
-    public VehicleTypes[] VehicleTypes { get; init; }
+    //public VehicleTypes[] VehicleTypes { get; init; }
 
     #endregion
 
@@ -26,7 +22,9 @@ public class BookingProcessor
     public BookingProcessor(IData db)
     {
         _db = db;
-        VehicleTypes = (VehicleTypes[])Enum.GetValues(typeof(VehicleTypes));
+        //TODO ändra till getnames så att du får strängar
+        //VehicleTypes = (VehicleTypes[])Enum.GetValues(typeof(VehicleTypes));
+        //VehicleTypes = (VehicleTypes[])Enum.GetValues(typeof(VehicleTypes));
 
         // skapa nya bokningar genom att anropa NewBooking
         NewBooking("GHI789", 240927); // tesla, Bud
@@ -97,6 +95,9 @@ public class BookingProcessor
 
     // returnerar bokningar
     public IEnumerable<IBooking> GetBookings() => _db.GetBookings().OrderBy(b => b.RegNo);
+
+    //returnerar enums (vehicle types)
+    public string[] GetVehicleTypes() => _db.GetVehicleTypes();
     #endregion
 
     #endregion METODER REGION ENDS

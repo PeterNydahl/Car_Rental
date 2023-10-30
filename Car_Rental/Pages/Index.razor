@@ -43,13 +43,15 @@
                 <th scope="col">
                     <select class="form-select" aria-label="Default select example">
                         <option selected></option>
-                        @foreach (var v in bp.VehicleTypes)
+                        @foreach (var v in bp.GetVehicleTypes())
                         {
                             <option value="@v">@v</option>
                         }
                     </select>
                 </th>
-                <th scope="col"></th>
+                <th scope="col">
+                    <input type="text" class="form-control" placeholder="$/Day" />
+                </th>
                 <th scope="col">
                     <button type="button" class="btn btn-outline-success">Add Vehicle</button>
                 </th>
@@ -167,4 +169,12 @@
     int ssn;
     string lastName = string.Empty;
     string firstName = string.Empty;
+
+    int regNo;
+    string brand = string.Empty;
+    int odometer;
+    int costKm;
+    string vehicleType = string.Empty;
+    int CostDay;
+
 }

@@ -29,19 +29,19 @@
             @*User input - Lägg till nytt fordon*@
             <tr>
                 <th scope="col">
-                    <input type="text" class="form-control" placeholder="Reg Nr" aria-label="Username" aria-describedby="basic-addon1">
+                    <input @bind="regNo" type="text" class="form-control" placeholder="Reg No" aria-label="Username" aria-describedby="basic-addon1">
                 </th>
                 <th scope="col">
-                    <input type="text" class="form-control" placeholder="Brand" aria-label="Username" aria-describedby="basic-addon1">
+                    <input @bind="brand" type="text" class="form-control" placeholder="Brand" aria-label="Username" aria-describedby="basic-addon1">
                 </th>
                 <th scope="col">
-                    <input type="text" class="form-control" placeholder="Odometer" aria-label="Username" aria-describedby="basic-addon1">
+                    <input @bind="odometer" type="text" class="form-control" placeholder="Odometer" aria-label="Username" aria-describedby="basic-addon1">
                 </th>
                 <th scope="col">
-                    <input type="text" class="form-control" placeholder="Cost/km" aria-label="Username" aria-describedby="basic-addon1">
+                    <input @bind="costKm" type="text" class="form-control" placeholder="Cost/km" aria-label="Username" aria-describedby="basic-addon1">
                 </th>
                 <th scope="col">
-                    <select class="form-select" aria-label="Default select example">
+                    <select @bind="vehicleType" class="form-select" aria-label="Default select example">
                         <option selected></option>
                         @foreach (var v in bp.GetVehicleTypes())
                         {
@@ -50,7 +50,7 @@
                     </select>
                 </th>
                 <th scope="col">
-                    <input type="text" class="form-control" placeholder="$/Day" />
+                    <input @bind="costDay" type="text" class="form-control" placeholder="$/Day" />
                 </th>
                 <th scope="col">
                     <button type="button" class="btn btn-outline-success">Add Vehicle</button>
@@ -170,11 +170,10 @@
     string lastName = string.Empty;
     string firstName = string.Empty;
 
-    int regNo;
+    string regNo = string.Empty;
     string brand = string.Empty;
     int odometer;
     int costKm;
     string vehicleType = string.Empty;
-    int CostDay;
-
+    int costDay;
 }

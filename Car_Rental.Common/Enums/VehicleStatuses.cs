@@ -5,5 +5,7 @@ public enum VehicleStatuses
     Booked = 1,
     Available = 2,
     Open = 3, 
-    Closed = 4  
+    Closed = 4,
+    Processing = 5,
+    Returned = 6,
 }

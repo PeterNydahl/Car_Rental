@@ -7,6 +7,7 @@ public interface IData
 {
     public void AddBooking(IBooking newBooking);
     public void AddCustomer(Customer newCustomer);
+    public void AddVehicle(IVehicle vehicle);
     IEnumerable<IPerson> GetPersons();
     IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default);
     IEnumerable<IBooking> GetBookings();

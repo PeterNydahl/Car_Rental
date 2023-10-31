@@ -53,7 +53,11 @@
                     <input @bind="costDay" type="text" class="form-control" placeholder="$/Day" />
                 </th>
                 <th scope="col">
-                    <button type="button" class="btn btn-outline-success">Add Vehicle</button>
+                    <button @onclick="() => {
+                    bp.AddVehicle(regNo, brand, odometer, costKm, vehicleType, costDay);
+                    ClearAllInputValues();
+                    }" 
+                    type="button" class="btn btn-outline-success">Add Vehicle</button>
                 </th>
                 <th scope="col"></th>
             </tr>
@@ -173,7 +177,12 @@
     string regNo = string.Empty;
     string brand = string.Empty;
     int odometer;
-    int costKm;
+    double costKm;
     string vehicleType = string.Empty;
     int costDay;
+
+    void ClearAllInputValues()
+    {
+        ssn = 0; lastName = string.Empty; firstName = string.Empty; regNo = string.Empty; brand = string.Empty; odometer = 0; costKm = 0; vehicleType = string.Empty; costDay = 0;
+    }
 }

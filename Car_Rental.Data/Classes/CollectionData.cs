@@ -41,6 +41,10 @@ public class CollectionData : IData
     {
         _persons.Add(newCustomer);
     }
+    public void AddVehicle(IVehicle newVehicle)
+    {
+        _vehicles.Add(newVehicle);
+    }
     #endregion
 
     #region Metoder som returnerar data

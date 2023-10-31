@@ -35,11 +35,20 @@ public class BookingProcessor
 
     #region ************* METODER *************
 
-    #region Metoder som lägger till
+    #region Metoder som lägger till kund, fordon
     // Metod som lägger till ny kund
     public void AddCustomer(int ssn, string lastName, string firstName)
     {
         _db.AddCustomer(new Customer() { Ssn = ssn, LastName = lastName, FirstName = firstName });
+    }
+    //Metod som lägger till ny fordon
+    public void AddVehicle(string regNo, string brand, int odometer, double costKm, string vehicleType, int costDay)
+    {
+        if (vehicleType == "Motorcycle")
+        {
+            _db.AddVehicle(new Motorcycle(regNo.ToUpper(), brand, odometer, costKm, vehicleType, costDay, VehicleStatuses.Available));
+        }
+        _db.AddVehicle(new Car(regNo.ToUpper(), brand, odometer, costKm, vehicleType, costDay, VehicleStatuses.Available));
     }
     #endregion
 

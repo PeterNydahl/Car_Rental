@@ -13,6 +13,8 @@ public class CollectionData : IData
     readonly List<IBooking> _bookings = new List<IBooking>();
 
     string[] _vehicleTypes = Enum.GetNames(typeof(VehicleTypes));
+
+    public int NewxtVehicleId => _vehicles.Count.Equals(0) ? 1 : _vehicles.Max(v => v.Id) + 1;
     public CollectionData() => SeedData(); 
 
     // Metod som lägger till data till listorna

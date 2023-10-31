@@ -3,6 +3,7 @@ namespace Car_Rental.Common.Interfaces;
 
 public interface IVehicle
 {
+    public int Id { get; init; }   
     public string? RegNo { get; init; }
     public string? Brand { get; init; }
 

@@ -72,11 +72,12 @@
                     <td>@vehicle.CostKm</td>
                     <td>@vehicle.VehicleType</td>
                     <td>@vehicle.CostDay</td>                   
-                        <td class ="d-flex">
+                    <td>
                         @*Om status är available visas Select och Rent-knapp*@
                         @if (vehicle.Status == VehicleStatuses.Available)
                         {
-                        <select class="form-select me-2" aria-label="Default select example">
+                            <div class="d-flex">
+                            <select class="form-select me-2" aria-label="Default select example">
                             <option selected></option>
                             @foreach (var v in bp.GetCustomers())
                             {
@@ -84,12 +85,15 @@
                             }
                         </select>
                             <button class="btn btn-outline-primary">Rent</button>
+                            </div>
                         }
                         @*Om status är booked visas fält för inmatning av Distance och Return-knapp*@
                         else
                         {
-                            <input type="text" placeholder="Distance" class="form-control me-2"/>
-                            <button class="btn btn-success">Return</button>
+                            <div class="d-flex">
+                                <input type="text" placeholder="Distance" class="form-control me-2"/>
+                                <button class="btn btn-success">Return</button>
+                            </div>
                         }
                     </td>
                     <td>

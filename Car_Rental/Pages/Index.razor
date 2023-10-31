@@ -45,7 +45,7 @@
                         <option selected></option>
                         @foreach (var v in bp.GetVehicleTypes())
                         {
-                            <option value="@v">@v</option>
+                            <option>@v</option>
                         }
                     </select>
                 </th>
@@ -76,15 +76,16 @@
                         @*Om status är available visas Select och Rent-knapp*@
                         @if (vehicle.Status == VehicleStatuses.Available)
                         {
+                            // TOD= rent car kund och fordon måste identifieras. 
                             <div class="d-flex">
                             <select class="form-select me-2" aria-label="Default select example">
                             <option selected></option>
-                            @foreach (var v in bp.GetCustomers())
+                            @foreach (var c in bp.GetCustomers())
                             {
-                                <option value="@v">@v.LastName @v.FirstName</option>
+                                <option value="@c.Id">@c.LastName @c.FirstName</option>
                             }
-                        </select>
-                                <button class="btn btn-outline-primary">Rent</button>
+                            </select>
+                                <button id="@vehicle.Id" class="btn btn-outline-primary">Rent</button>
                             </div>
                         }
                         @*Om status är booked visas fält för inmatning av Distance och Return-knapp*@

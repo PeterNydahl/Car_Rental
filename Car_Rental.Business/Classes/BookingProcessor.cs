@@ -22,14 +22,10 @@ public class BookingProcessor
     public BookingProcessor(IData db)
     {
         _db = db;
-        //TODO ändra till getnames så att du får strängar
-        //VehicleTypes = (VehicleTypes[])Enum.GetValues(typeof(VehicleTypes));
-        //VehicleTypes = (VehicleTypes[])Enum.GetValues(typeof(VehicleTypes));
-
-        // skapa nya bokningar genom att anropa NewBooking
-        NewBooking("GHI789", 240927); // tesla, Bud
-        NewBooking("JKL012", 171010); // jeep, Monk
-        ReturnVehicle("JKL012", 6000);
+        
+        NewBooking(1, 1); // tesla, Bud
+        NewBooking(2, 2); // jeep, Monk
+        ReturnVehicle(1, 1, 6000);
     }
     #endregion
 
@@ -54,27 +50,28 @@ public class BookingProcessor
     #endregion
 
     #region Metoder som sköter bokningar
-    public void NewBooking(string regNr, int ssn)
+    // TODO : gör om parametrar till id för fordon och kund
+    public void NewBooking(int vehicleId, int customerId)
     {
         // skapar en bokning
-        Customer customer = (Customer)_db.GetPersons().First(c => c.Ssn == ssn);
-        _db.AddBooking(new Booking(_db.NextBookingId, _db.GetVehicles().First(v => v.RegNo == regNr), customer, new(2023, 10, 10), VehicleStatuses.Open));
+        Customer customer = (Customer)_db.GetPersons().First(c => c.Id == customerId);
+        _db.AddBooking(new Booking(_db.NextBookingId, _db.GetVehicles().First(v => v.Id == vehicleId), customer, new(2023, 10, 10), VehicleStatuses.Open));
 
         // Ändrar status till Booked för fordonet i Vehicle-lista
-        IVehicle updateVehicle = _db.GetVehicles().First(v => v.RegNo == regNr);
+        IVehicle updateVehicle = _db.GetVehicles().First(v => v.Id == vehicleId);
         updateVehicle.Status = VehicleStatuses.Booked;
     }
 
     // (lämna tillbaka fordon) - gör uträkning och ändrar status
-    public void ReturnVehicle(string regNr, int kmReturned)
+    public void ReturnVehicle(int vehicleId, int bookingId, int kmReturned)
     {
         // leta upp fordonets som bokningen gäller, ändra status och odometer
-        IVehicle? vehicle = _db.GetVehicles().First(v => v.RegNo == regNr); 
+        IVehicle? vehicle = _db.GetVehicles().First(v => v.Id == vehicleId); 
         vehicle.Status = VehicleStatuses.Available;
         vehicle.Odometer = kmReturned;
 
         //leta upp bokningen som ska avslutas och ändra status
-        IBooking? booking = _db.GetBookings().First(bv => bv.RegNo == regNr);
+        IBooking? booking = _db.GetBookings().First(b => b.Id == bookingId);
         booking.Status = VehicleStatuses.Closed;
 
         // Gör uträkning
@@ -94,6 +91,35 @@ public class BookingProcessor
         int RentedDays = (int)Math.Round(DifferenceInDays, 0);
         booking.Cost = RentedDays * vehicle.CostDay + (booking.KmReturned - booking.KmRented) * vehicle.CostKm;
     }
+
+    //public void ReturnVehicle(string regNr, int kmReturned)
+    //{
+    //    // leta upp fordonets som bokningen gäller, ändra status och odometer
+    //    IVehicle? vehicle = _db.GetVehicles().First(v => v.RegNo == regNr);
+    //    vehicle.Status = VehicleStatuses.Available;
+    //    vehicle.Odometer = kmReturned;
+
+    //    //leta upp bokningen som ska avslutas och ändra status
+    //    IBooking? booking = _db.GetBookings().First(bv => bv.RegNo == regNr);
+    //    booking.Status = VehicleStatuses.Closed;
+
+    //    // Gör uträkning
+    //    booking.Cost = 0;
+    //    booking.DayReturned = DateOnly.FromDateTime(DateTime.Now);
+    //    booking.KmReturned = kmReturned;
+
+    //    if (booking.KmReturned == null || booking.DayReturned == null || booking.Cost == null) return;
+
+    //    DateTime date1 = DateTime.Now;
+    //    //Konvertera datatyp för att möjliggöra beräkning av mellanskillnad i dagar.
+    //    DateTime date2 = booking.DayRentedOut.ToDateTime(TimeOnly.Parse("00:00:00"));
+
+    //    // Räkna ut mellanskillnad i dagar
+    //    TimeSpan duration = (TimeSpan)(date1 - date2);
+    //    double DifferenceInDays = duration.TotalDays;
+    //    int RentedDays = (int)Math.Round(DifferenceInDays, 0);
+    //    booking.Cost = RentedDays * vehicle.CostDay + (booking.KmReturned - booking.KmRented) * vehicle.CostKm;
+    //}
     #endregion
 
     #region Metoder som returnerar

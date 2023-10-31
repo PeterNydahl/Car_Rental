@@ -5,6 +5,11 @@ using Car_Rental.Common.Interfaces;
 namespace Car_Rental.Data.Interfaces;
 public interface IData
 {
+    public int NextVehicleId { get; }
+    public int NextPersonId { get; }
+    public int NextBookingId { get; }
+
+    
     public void AddBooking(IBooking newBooking);
     public void AddCustomer(Customer newCustomer);
     public void AddVehicle(IVehicle vehicle);

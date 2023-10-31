@@ -39,16 +39,17 @@ public class BookingProcessor
     // Metod som lägger till ny kund
     public void AddCustomer(int ssn, string lastName, string firstName)
     {
-        _db.AddCustomer(new Customer() { Ssn = ssn, LastName = lastName, FirstName = firstName });
+        _db.AddCustomer(new Customer() { Id = _db.NextPersonId, Ssn = ssn, LastName = lastName, FirstName = firstName });
     }
-    //Metod som lägger till ny fordon
+
+    //Metod som lägger till nytt fordon
     public void AddVehicle(string regNo, string brand, int odometer, double costKm, string vehicleType, int costDay)
     {
         if (vehicleType == "Motorcycle")
         {
-            _db.AddVehicle(new Motorcycle(regNo.ToUpper(), brand, odometer, costKm, vehicleType, costDay, VehicleStatuses.Available));
+            _db.AddVehicle(new Motorcycle(_db.NextVehicleId, regNo.ToUpper(), brand, odometer, costKm, vehicleType, costDay, VehicleStatuses.Available));
         }
-        _db.AddVehicle(new Car(regNo.ToUpper(), brand, odometer, costKm, vehicleType, costDay, VehicleStatuses.Available));
+        _db.AddVehicle(new Car(_db.NextVehicleId, regNo.ToUpper(), brand, odometer, costKm, vehicleType, costDay, VehicleStatuses.Available));
     }
     #endregion
 
@@ -57,7 +58,7 @@ public class BookingProcessor
     {
         // skapar en bokning
         Customer customer = (Customer)_db.GetPersons().First(c => c.Ssn == ssn);
-        _db.AddBooking(new Booking(_db.GetVehicles().First(v => v.RegNo == regNr), customer, new(2023, 10, 10), VehicleStatuses.Open));
+        _db.AddBooking(new Booking(_db.NextBookingId, _db.GetVehicles().First(v => v.RegNo == regNr), customer, new(2023, 10, 10), VehicleStatuses.Open));
 
         // Ändrar status till Booked för fordonet i Vehicle-lista
         IVehicle updateVehicle = _db.GetVehicles().First(v => v.RegNo == regNr);

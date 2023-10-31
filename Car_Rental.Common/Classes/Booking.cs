@@ -5,9 +5,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace Car_Rental.Common.Classes;
 public class Booking : IBooking
 {
-    //private IVehicle vehicle;
-    //private IPerson customer;
-    // testar att byta ut dessa fält mot props
+    public int Id { get; init; }
     public IVehicle Vehicle { get; init; }
     public IPerson Customer { get; set; }
 
@@ -21,8 +19,9 @@ public class Booking : IBooking
     public double? Cost { get; set; }
     public VehicleStatuses Status { get; set; }
 
-    public Booking(IVehicle vehicle, IPerson customer, DateOnly dayRentedOut, VehicleStatuses status)
+    public Booking(int id, IVehicle vehicle, IPerson customer, DateOnly dayRentedOut, VehicleStatuses status)
     {
+        Id = id;
         Vehicle = vehicle;
         Customer = customer;
         NameWithSsn = $"{Customer.FirstName} {Customer.LastName}({Customer.Ssn})";

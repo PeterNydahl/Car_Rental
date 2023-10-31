@@ -14,22 +14,25 @@ public class CollectionData : IData
 
     string[] _vehicleTypes = Enum.GetNames(typeof(VehicleTypes));
 
-    public int NewxtVehicleId => _vehicles.Count.Equals(0) ? 1 : _vehicles.Max(v => v.Id) + 1;
-    public CollectionData() => SeedData(); 
+    public int NextVehicleId => _vehicles.Count.Equals(0) ? 1 : _vehicles.Max(v => v.Id) + 1;
+    public int NextPersonId => _persons.Count.Equals(0) ? 1 : _persons.Max(p => p.Id) + 1;
+    public int NextBookingId => _bookings.Count.Equals(0) ? 1 : _bookings.Max(b => b.Id) + 1;
+
+    public CollectionData() => SeedData(); //TODO: Exakt vad gör denna metod? public COllectionData() => SeedData();
 
     // Metod som lägger till data till listorna
     void SeedData()
     {
         //adding cutomers
-        _persons.Add(new Customer() { Ssn = 171010, LastName = "Monk", FirstName = "Thelonius" });
-        _persons.Add(new Customer() { Ssn = 240927, LastName = "Powell", FirstName = "Bud" });
+        _persons.Add(new Customer() { Id = NextPersonId, Ssn = 171010, LastName = "Monk", FirstName = "Thelonius" });
+        _persons.Add(new Customer() { Id = NextPersonId, Ssn = 240927, LastName = "Powell", FirstName = "Bud" });
 
         //adding vehicles
-        _vehicles.Add(new Motorcycle("MNO234", "Yamaha", 30000, 0.5, _vehicleTypes[3], 50, VehicleStatuses.Available)); 
-        _vehicles.Add(new Car("ABC123", "Volvo", 10000, 1, _vehicleTypes[1], 200, VehicleStatuses.Available));
-        _vehicles.Add(new Car("DEF456", "Saab", 20000, 1, _vehicleTypes[0], 100, VehicleStatuses.Available));
-        _vehicles.Add(new Car("GHI789", "Tesla", 1000, 3, _vehicleTypes[0], 100, VehicleStatuses.Available)); 
-        _vehicles.Add(new Car("JKL012", "Jeep", 5000, 1.5, _vehicleTypes[2], 300, VehicleStatuses.Available)); 
+        _vehicles.Add(new Motorcycle(NextVehicleId, "MNO234", "Yamaha", 30000, 0.5, _vehicleTypes[3], 50, VehicleStatuses.Available)); 
+        _vehicles.Add(new Car(NextVehicleId, "ABC123", "Volvo", 10000, 1, _vehicleTypes[1], 200, VehicleStatuses.Available));
+        _vehicles.Add(new Car(NextVehicleId, "DEF456", "Saab", 20000, 1, _vehicleTypes[0], 100, VehicleStatuses.Available));
+        _vehicles.Add(new Car(NextVehicleId, "GHI789", "Tesla", 1000, 3, _vehicleTypes[0], 100, VehicleStatuses.Available)); 
+        _vehicles.Add(new Car(NextVehicleId, "JKL012", "Jeep", 5000, 1.5, _vehicleTypes[2], 300, VehicleStatuses.Available)); 
     }
 
     #region ********* METODER *********

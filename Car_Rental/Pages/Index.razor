@@ -76,16 +76,26 @@
                         @*Om status är available visas Select och Rent-knapp*@
                         @if (vehicle.Status == VehicleStatuses.Available)
                         {
-                            // TOD= rent car kund och fordon måste identifieras. 
+                           @*  <div class="d-flex">
+                                <select class="form-select me-2" aria-label="Default select example" @onchange="HandleCustomerSelection" value="@selectedCustomerId">
+                                    <option selected></option>
+                                    @foreach (var c in bp.GetCustomers())
+                                    {
+                                        <option value="@c.Id">@c.LastName @c.FirstName</option>
+                                    }
+                                </select>
+                                <button @onclick="() => bp.NewBooking(vehicle.Id, selectedCustomerId)" class="btn btn-outline-primary">Rent</button>
+                            </div> *@
+
                             <div class="d-flex">
-                            <select class="form-select me-2" aria-label="Default select example">
+                            <select class="form-select me-2" aria-label="default select example">
                             <option selected></option>
                             @foreach (var c in bp.GetCustomers())
                             {
                                 <option value="@c.Id">@c.LastName @c.FirstName</option>
                             }
                             </select>
-                                <button id="@vehicle.Id" class="btn btn-outline-primary">Rent</button>
+                                <button @onclick="() => bp.NewBooking(vehicle.Id, hardCodedCustomerId)" id="@vehicle.Id" class="btn btn-outline-primary">rent</button>
                             </div>
                         }
                         @*Om status är booked visas fält för inmatning av Distance och Return-knapp*@
@@ -200,4 +210,15 @@
     {
         ssn = 0; lastName = string.Empty; firstName = string.Empty; regNo = string.Empty; brand = string.Empty; odometer = 0; costKm = 0; vehicleType = string.Empty; costDay = 0;
     }
+
+    int hardCodedCustomerId = 1;
+    int selectedCustomerId;
+    private void HandleCustomerSelection(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value.ToString(), out int customerId))
+        {
+            selectedCustomerId = customerId;
+        }
+    }
+
 }

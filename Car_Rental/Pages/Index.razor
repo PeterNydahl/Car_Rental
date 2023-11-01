@@ -73,7 +73,7 @@
                     <td>@vehicle.VehicleType</td>
                     <td>@vehicle.CostDay</td>                   
                     <td>
-                        @*Om status är available visas Select och Rent-knapp*@
+                        @* HYRA BIL: Om status är available visas Select och Rent-knapp*@
                         @if (vehicle.Status == VehicleStatuses.Available)
                         {
 
@@ -87,24 +87,13 @@
                                 </select>
                                 <button @onclick="() => bp.NewBooking(vehicle.Id, selectedCustomerId)" class="btn btn-outline-primary">Rent</button>
                             </div>
-                            
-                            @* <div class="d-flex">
-                            <select class="form-select me-2" aria-label="default select example">
-                            <option selected></option>
-                            @foreach (var c in bp.GetCustomers())
-                            {
-                                <option value="@c.Id">@c.LastName @c.FirstName</option>
-                            }
-                            </select>
-                                <button @onclick="() => bp.NewBooking(vehicle.Id, hardCodedCustomerId)" id="@vehicle.Id" class="btn btn-outline-primary">rent</button>
-                            </div> *@
                         }
-                        @*Om status är booked visas fält för inmatning av Distance och Return-knapp*@
+                        @* LÄMNA TILLBAKA BIL: Om status är booked visas fält för inmatning av Distance och Return-knapp*@
                         else
                         {
                             <div class="d-flex">
-                                <input type="text" placeholder="Distance" class="form-control me-2"/>
-                                <button class="btn btn-success">Return</button>
+                                <input @bind="distance" type="text" placeholder="Distance" class="form-control me-2" />
+                                <button @onclick="() => bp.ReturnVehicle(vehicle.Id, bp.GetBooking(vehicle.RegNo).Id, distanceTest)" class="btn btn-success">Return</button>
                             </div>
                         }
                     </td>
@@ -196,6 +185,10 @@
 </div>
 
 @code{
+    //TODO ta bort slaskvariabler
+    int bookingIdTest = 1;
+    int distanceTest = 300;
+
     int ssn;
     string lastName = string.Empty;
     string firstName = string.Empty;
@@ -207,12 +200,16 @@
     string vehicleType = string.Empty;
     int costDay;
 
+    int distance;
+
     void ClearAllInputValues()
     {
         ssn = 0; lastName = string.Empty; firstName = string.Empty; regNo = string.Empty; brand = string.Empty; odometer = 0; costKm = 0; vehicleType = string.Empty; costDay = 0;
     }
 
     int selectedCustomerId;
+    
+    // TODO kolla in try parse och varför det inte går att casta direkt till en int
     private void HandleCustomerSelection(ChangeEventArgs e)
     {
         if (int.TryParse(e.Value.ToString(), out int customerId))

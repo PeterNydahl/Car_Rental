@@ -93,7 +93,7 @@
                         {
                             <div class="d-flex">
                                 <input @bind="distance" type="text" placeholder="Distance" class="form-control me-2" />
-                                <button @onclick="() => bp.ReturnVehicle(vehicle.Id, bp.GetBooking(vehicle.RegNo).Id, distanceTest)" class="btn btn-success">Return</button>
+                                <button @onclick="() => bp.ReturnVehicle(vehicle.Id, bp.GetBooking(vehicle.RegNo).Id, distance)" class="btn btn-success">Return</button>
                             </div>
                         }
                     </td>
@@ -126,22 +126,23 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var customer in bp.GetBookings())
+            @foreach (var b in bp.GetBookings())
             {
                 <tr>
-                    <th scope="row">@customer.RegNo</th>
-                    <td>@customer.NameWithSsn</td>
-                    <td>@customer.KmRented</td>
-                    <td>@customer.KmReturned</td>
-                    <td>@customer.DayRentedOut</td>
-                    <td>@customer.DayReturned</td>
-                    <td>@customer.Cost</td>
+                    <th scope="row">@b.RegNo</th>
+                    <td>@b.NameWithSsn</td>
+                    <td>@b.KmRented</td>
+                    <td>@(b.KmRented + b.Distance)</td>
+                    <td>@b.DayRentedOut</td>
+                    <td>@b.DayReturned</td>
+                    <td>@b.Cost</td>
                     <td>
-                        <span class="@((int)customer.Status == 3
+                        <span class="@((int)b.Status == 3
                             ? "badge bg-danger text-light"
-                            : "badge bg-success text-light")">@customer.Status</span>
+                            : "badge bg-success text-light")">@b.Status</span>
                     </td>
                 </tr>
+                
             }
         </tbody>
     </table>

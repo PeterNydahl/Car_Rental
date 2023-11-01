@@ -70,13 +70,14 @@ public class BookingProcessor
         
     }
 
+    //TODO odometern fel när jag lämnar tillbaka bilen
     // (lämna tillbaka fordon) - gör uträkning och ändrar status
-    public void ReturnVehicle(int vehicleId, int bookingId, int kmReturned)
+    public void ReturnVehicle(int vehicleId, int bookingId, int distance)
     {
         // leta upp fordonets som bokningen gäller, ändra status och odometer
         IVehicle? vehicle = _db.GetVehicles().First(v => v.Id == vehicleId); 
         vehicle.Status = VehicleStatuses.Available;
-        vehicle.Odometer = kmReturned;
+        vehicle.Odometer += distance;
 
         //leta upp bokningen som ska avslutas och ändra status
         IBooking? booking = _db.GetBookings().First(b => b.Id == bookingId);
@@ -85,9 +86,10 @@ public class BookingProcessor
         // Gör uträkning
         booking.Cost = 0;
         booking.DayReturned = DateOnly.FromDateTime(DateTime.Now);
-        booking.KmReturned = kmReturned;
+        booking.Distance = distance;
 
-        if (booking.KmReturned == null || booking.DayReturned == null || booking.Cost == null) return;
+        //TODO ta ev bort denna konstiga kontroll
+        if (booking.DayReturned == null || booking.Cost == null) return;
 
         DateTime date1 = DateTime.Now;
         //Konvertera datatyp för att möjliggöra beräkning av mellanskillnad i dagar.
@@ -97,7 +99,7 @@ public class BookingProcessor
         TimeSpan duration = (TimeSpan)(date1 - date2);
         double DifferenceInDays = duration.TotalDays;
         int RentedDays = (int)Math.Round(DifferenceInDays, 0);
-        booking.Cost = RentedDays * vehicle.CostDay + (booking.KmReturned - booking.KmRented) * vehicle.CostKm;
+        booking.Cost = RentedDays * vehicle.CostDay + (booking.Distance * vehicle.CostKm);
     }
 
    

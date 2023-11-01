@@ -16,7 +16,7 @@ public interface IBooking
     public string? RegNo { get; init; }
     public string? NameWithSsn { get; init; }
     public int KmRented { get; init; }
-    public int? KmReturned { get; set; }
+    public int Distance { get; set; }
     public DateOnly DayRentedOut { get; init; }
     public DateOnly? DayReturned { get; set; }
     public double? Cost { get; set; }

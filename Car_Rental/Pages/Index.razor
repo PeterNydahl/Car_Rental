@@ -147,7 +147,12 @@
                     <th scope="row">@b.RegNo</th>
                     <td>@b.NameWithSsn</td>
                     <td>@b.KmRented</td>
-                    <td>@(b.KmRented + b.Distance)</td>
+                    <td>
+                        @if((int)b.Status == 4)
+                        {
+                            @(b.KmRented + b.Distance)
+                        }
+                    </td>
                     <td>@b.DayRentedOut</td>
                     <td>@b.DayReturned</td>
                     <td>@b.Cost</td>

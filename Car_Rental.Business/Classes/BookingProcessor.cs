@@ -65,7 +65,7 @@ public class BookingProcessor
             IsBookingProcessing = true;
 
             // hämtar kund genom asynkron metod
-            await Task.Delay(5000);
+            await Task.Delay(10000);
             Customer customer = await GetCustomerAsync(customerId);
             // skapar en bokning
             _db.AddBooking(new Booking(_db.NextBookingId, _db.GetVehicles().First(v => v.Id == vehicleId), customer, new(2023, 10, 30), VehicleStatuses.Open));

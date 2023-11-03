@@ -2,6 +2,7 @@
 using Car_Rental.Common.Enums;
 using Car_Rental.Common.Interfaces;
 using Car_Rental.Data.Interfaces;
+
 using System.Collections.Generic;
 using System.Security.AccessControl;
 using System.Security.Cryptography.X509Certificates;
@@ -14,6 +15,8 @@ public class BookingProcessor
 
     readonly IData _db;
 
+    public bool IsBookingProcessing { get; set; }
+
     //public VehicleTypes[] VehicleTypes { get; init; }
 
     #endregion
@@ -23,9 +26,10 @@ public class BookingProcessor
     {
         _db = db;
         
-        NewBooking(1, 1); // tesla, Bud
-        NewBooking(5, 2); // jeep, Monk
-        ReturnVehicle(5, 2, 6000);
+        //TODO: Ta bort hårdkådade bokningar?
+        //NewBooking(1, 1); // tesla, Bud
+        //NewBooking(5, 2); // jeep, Monk
+        //ReturnVehicle(5, 2, 6000);
     }
     #endregion
 
@@ -50,25 +54,54 @@ public class BookingProcessor
     #endregion
 
     #region Metoder som sköter bokningar
-    // TODO : gör om parametrar till id för fordon och kund
-    public void NewBooking(int vehicleId, int customerId)
+    public async Task<Customer> GetCustomerAsync(int customerId) =>
+        await Task.Run(() => (Customer)_db.GetPersons().First(c => c.Id == customerId));
+    public async Task<IVehicle> GetVehicleAsync(int vehicleId) =>
+        await Task.Run(() => _db.GetVehicles().First(v => v.Id == vehicleId));
+    public async Task NewBookingAsync(int vehicleId, int customerId)
     {
         try
         {
-        // skapar en bokning
-        Customer customer = (Customer)_db.GetPersons().First(c => c.Id == customerId);
-        _db.AddBooking(new Booking(_db.NextBookingId, _db.GetVehicles().First(v => v.Id == vehicleId), customer, new(2023, 10, 30), VehicleStatuses.Open));
+            IsBookingProcessing = true;
 
-        // Ändrar status till Booked för fordonet i Vehicle-lista
-        IVehicle updateVehicle = _db.GetVehicles().First(v => v.Id == vehicleId);
-        updateVehicle.Status = VehicleStatuses.Booked;
+            // hämtar kund genom asynkron metod
+            await Task.Delay(5000);
+            Customer customer = await GetCustomerAsync(customerId);
+            // skapar en bokning
+            _db.AddBooking(new Booking(_db.NextBookingId, _db.GetVehicles().First(v => v.Id == vehicleId), customer, new(2023, 10, 30), VehicleStatuses.Open));
+
+            // hämtar fordon med asynkron metod
+            IVehicle updateVehicle = await GetVehicleAsync(vehicleId);
+            // Ändrar status till Booked för fordonet i Vehicle-lista
+            updateVehicle.Status = VehicleStatuses.Booked;
+
+            IsBookingProcessing = false;
         }
         catch
         {
             return;
         }
-        
     }
+
+    //TODO: ta bort NewBooking (ej asynkron)
+    //public void NewBooking(int vehicleId, int customerId)
+    //{
+    //    try
+    //    {
+    //        // skapar en bokning
+    //        Customer customer = (Customer)_db.GetPersons().First(c => c.Id == customerId);
+    //        _db.AddBooking(new Booking(_db.NextBookingId, _db.GetVehicles().First(v => v.Id == vehicleId), customer, new(2023, 10, 30), VehicleStatuses.Open));
+
+    //        // Ändrar status till Booked för fordonet i Vehicle-lista
+    //        IVehicle updateVehicle = _db.GetVehicles().First(v => v.Id == vehicleId);
+    //        updateVehicle.Status = VehicleStatuses.Booked;
+    //    }
+    //    catch
+    //    {
+    //        return;
+    //    }
+    //}
+
 
     //TODO odometern fel när jag lämnar tillbaka bilen
     // (lämna tillbaka fordon) - gör uträkning och ändrar status

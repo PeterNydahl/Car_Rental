@@ -5,13 +5,23 @@
 
 <PageTitle>Car Rental</PageTitle>
 
-@{//TODO: lägg till en föräldra-div till allt för att kunna kontrollera storlek på child-divs.
+@{
+    //STYLING
+    //TODO: lägg till en föräldra-div till allt för att kunna kontrollera storlek på child-divs.
+    
+    //DONE: outsourca en metod till i NewBooking och gör den asynkron
+    //DONE: Lägg till en ny status processing som syns under tiden bokningen "hämtas"
+    //DONE: lås hela divens knappar under tiden den processar
+    //DONE: lägg kanske till ett grått filer eller liknande under låsningen
 }
+
 @* *********************VEHICLES*********************** *@
-<div class="container">
+<div class="container @(bp.IsBookingProcessing? "unclickable" : "")">
     <h1>Nydahls Biluthyrning (VG)</h1>
     <h4>Vehicles</h4>
-    <table class="table table-hover border border-dark">
+    <table class="
+        @(bp.IsBookingProcessing ? "table table-hover border border-dark table-secondary" : "table table-hover border border-dark")
+        ">
         @*Visar kategorier (table header)*@
         <thead>
             <tr class="table-dark">
@@ -59,7 +69,12 @@
                     }" 
                     type="button" class="btn btn-outline-success">Add Vehicle</button>
                 </th>
-                <th scope="col"></th>
+                <th scope="col">
+                    @if (bp.IsBookingProcessing)
+                    {
+                    <span class="badge text-bg-warning">Processing...</span>
+                    }
+                </th>
             </tr>
 
             @*Läser in och visar urvalet av bilar*@
@@ -85,7 +100,7 @@
                                         <option value="@c.Id">@c.LastName @c.FirstName</option>
                                     }
                                 </select>
-                                <button @onclick="() => bp.NewBooking(vehicle.Id, selectedCustomerId)" class="btn btn-outline-primary">Rent</button>
+                                <button @onclick="() => bp.NewBookingAsync(vehicle.Id, selectedCustomerId)" class="btn btn-outline-primary">Rent</button>
                             </div>
                         }
                         @* LÄMNA TILLBAKA BIL: Om status är booked visas fält för inmatning av Distance och Return-knapp*@
@@ -186,9 +201,10 @@
 </div>
 
 @code{
-    //TODO ta bort slaskvariabler
-    int bookingIdTest = 1;
-    int distanceTest = 300;
+    //TODO ta bort slaskvariabler och metoder
+    //SLASK START
+
+    //SLASK END
 
     int ssn;
     string lastName = string.Empty;

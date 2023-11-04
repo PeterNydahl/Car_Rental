@@ -5,18 +5,35 @@
 
 <PageTitle>Car Rental</PageTitle>
 
+
 @{
-    //STYLING
+    //STYLING, ATT GÖRA SENARE
     //TODO: lägg till en föräldra-div till allt för att kunna kontrollera storlek på child-divs.
+    //TODO: undersök drop down menyn
+
+    //TODO:LÄgg till WhenAll()
+    //TODO: Lägg till felhantering på AddCustomer
+    //TODO: Lägg till felhantering på AddVehicle
+    //TODO: Lägg till felhantering på AddBooking
     
     //DONE: outsourca en metod till i NewBooking och gör den asynkron
     //DONE: Lägg till en ny status processing som syns under tiden bokningen "hämtas"
     //DONE: lås hela divens knappar under tiden den processar
     //DONE: lägg kanske till ett grått filer eller liknande under låsningen
+
 }
 
 @* *********************VEHICLES*********************** *@
 <div class="container @(bp.IsBookingProcessing? "unclickable" : "")">
+    
+    @* visar meddelande när fel uppstår *@
+    @if (bp.ShowErrorMessage)
+    {
+    <div class="alert alert-danger w-50 p-3" role="alert">
+        @bp.ErrorMessage
+    </div>    
+    }
+
     <h1>Nydahls Biluthyrning (VG)</h1>
     <h4>Vehicles</h4>
     <table class="
@@ -94,7 +111,7 @@
 
                             <div class="d-flex">
                                 <select class="form-select me-2" aria-label="Default select example" @onchange="HandleCustomerSelection" value="@selectedCustomerId">
-                                    <option selected></option>
+                                    @* <option selected></option> *@
                                     @foreach (var c in bp.GetCustomers())
                                     {
                                         <option value="@c.Id">@c.LastName @c.FirstName</option>

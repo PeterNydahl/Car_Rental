@@ -1,5 +1,6 @@
 ﻿using Car_Rental.Common.Classes;
 using Car_Rental.Common.Enums;
+using Car_Rental.Common.Exceptions;
 using Car_Rental.Common.Interfaces;
 using Car_Rental.Data.Interfaces;
 
@@ -16,6 +17,9 @@ public class BookingProcessor
     readonly IData _db;
 
     public bool IsBookingProcessing { get; set; }
+
+    public string ErrorMessage { get; set; } = string.Empty;
+    public bool ShowErrorMessage { get; set; }
 
     //public VehicleTypes[] VehicleTypes { get; init; }
 
@@ -60,12 +64,18 @@ public class BookingProcessor
         await Task.Run(() => _db.GetVehicles().First(v => v.Id == vehicleId));
     public async Task NewBookingAsync(int vehicleId, int customerId)
     {
+        ShowErrorMessage = false;
+        
         try
         {
+            if (customerId <= 0)
+            {
+                throw new InvalidIdException();
+            }
             IsBookingProcessing = true;
 
             // hämtar kund genom asynkron metod
-            await Task.Delay(10000);
+            await Task.Delay(1000);
             Customer customer = await GetCustomerAsync(customerId);
             // skapar en bokning
             _db.AddBooking(new Booking(_db.NextBookingId, _db.GetVehicles().First(v => v.Id == vehicleId), customer, new(2023, 10, 30), VehicleStatuses.Open));
@@ -77,8 +87,10 @@ public class BookingProcessor
 
             IsBookingProcessing = false;
         }
-        catch
+        catch (InvalidIdException iv)
         {
+            ErrorMessage = iv.Message;
+            ShowErrorMessage = true;
             return;
         }
     }

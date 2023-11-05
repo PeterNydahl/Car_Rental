@@ -1,6 +1,7 @@
 ﻿using Car_Rental.Common.Classes;
 using Car_Rental.Common.Enums;
 using Car_Rental.Common.Exceptions;
+using Car_Rental.Common.Extensions;
 using Car_Rental.Common.Interfaces;
 using Car_Rental.Data.Interfaces;
 
@@ -123,7 +124,7 @@ public class BookingProcessor
             await Task.Delay(1000);
             Customer customer = await GetCustomerAsync(customerId);
             // skapar en bokning
-            _db.AddBooking(new Booking(_db.NextBookingId, _db.GetVehicles().First(v => v.Id == vehicleId), customer, new(2023, 10, 30), VehicleStatuses.Open));
+            _db.AddBooking(new Booking(_db.NextBookingId, _db.GetVehicles().First(v => v.Id == vehicleId), customer, new(2023, 11, 01), VehicleStatuses.Open));
 
             // hämtar fordon med asynkron metod
             IVehicle updateVehicle = await GetVehicleAsync(vehicleId);
@@ -139,7 +140,6 @@ public class BookingProcessor
             return;
         }
     }
-
     public void ReturnVehicle(int vehicleId, int bookingId, int distance)
     {
         // leta upp fordonets som bokningen gäller, ändra status och odometer
@@ -151,27 +151,24 @@ public class BookingProcessor
         IBooking? booking = _db.GetBookings().First(b => b.Id == bookingId);
         booking.Status = VehicleStatuses.Closed;
 
-        // Gör uträkning
+        // Gör uträkningar
         booking.Cost = 0;
         booking.DayReturned = DateOnly.FromDateTime(DateTime.Now);
         booking.Distance = distance;
 
-        //TODO ta ev bort denna konstiga kontroll
-        if (booking.DayReturned == null || booking.Cost == null) return;
-
-        DateTime date1 = DateTime.Now;
+        DateTime date2 = DateTime.Now;
         //Konvertera datatyp för att möjliggöra beräkning av mellanskillnad i dagar.
-        DateTime date2 = booking.DayRentedOut.ToDateTime(TimeOnly.Parse("00:00:00"));
+        DateTime date1 = booking.DayRentedOut.ToDateTime(TimeOnly.Parse("00:00:00"));
 
-        // Räkna ut mellanskillnad i dagar
-        TimeSpan duration = (TimeSpan)(date1 - date2);
-        double DifferenceInDays = duration.TotalDays;
+        // Extensionmetod ("Duration") som räknar ut mellanskillnad i dagar
+        double DifferenceInDays = date1.Duration(date2).TotalDays;
+
         int RentedDays = (int)Math.Round(DifferenceInDays, 0);
         booking.Cost = RentedDays * vehicle.CostDay + (booking.Distance * vehicle.CostKm);
     }
     #endregion
 
-    #region Metoder som returnerar
+    #region Metoder som hämtar och returnerar data
     // returnerar kunder 
     public IEnumerable<Customer> GetCustomers() => _db.GetPersons().Cast<Customer>();
 

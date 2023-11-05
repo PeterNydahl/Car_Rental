@@ -13,5 +13,17 @@ public class Vehicle : IVehicle
     public string VehicleType { get; init; }
     public int CostDay { get; set; }
     public VehicleStatuses Status { get; set; }
+    public Vehicle(int id, string RegNo, string Brand, int Odometer, double CostKm, string VehicleType, int CostDay, VehicleStatuses Status)
+    {
+        this.Id = id;
+        this.RegNo = RegNo;
+        this.Brand = Brand;
+        this.Odometer = Odometer;
+        this.CostKm = CostKm;
+        this.VehicleType = VehicleType;
+        this.CostDay = CostDay;
+        this.Status = Status;
+    }
 }
+
 

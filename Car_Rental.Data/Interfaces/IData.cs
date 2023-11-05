@@ -16,5 +16,4 @@ public interface IData
     IEnumerable<IPerson> GetPersons();
     IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default);
     IEnumerable<IBooking> GetBookings();
-    public string[] GetVehicleTypes();
 }

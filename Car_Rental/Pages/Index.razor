@@ -10,17 +10,15 @@
     //STYLING, ATT GÖRA SENARE
     //TODO: lägg till en föräldra-div till allt för att kunna kontrollera storlek på child-divs.
     //TODO: undersök drop down menyn
+    //TODO: dubbelkolla att uträkningen är korrekt
+    //TODO: förläng delay
 
-    //TODO:LÄgg till WhenAll()
-    //TODO: Lägg till felhantering på AddCustomer
-    //TODO: Lägg till felhantering på AddVehicle
-    //TODO: Lägg till felhantering på AddBooking
-    
-    //DONE: outsourca en metod till i NewBooking och gör den asynkron
-    //DONE: Lägg till en ny status processing som syns under tiden bokningen "hämtas"
-    //DONE: lås hela divens knappar under tiden den processar
-    //DONE: lägg kanske till ett grått filer eller liknande under låsningen
-
+    //TODO: lägg till ett arv. Gör IVehicle till en klass som car och motorcycle ärver ifrån. Lägg gemensam metodfunktionaliet i basklassen.
+    //TODO: lägg till en extension metod. Common/Extensions/VehicleExtension.cs/Duration(this  DateTime StartDate, DateTime EndDate)
+    //TOTO: gör alla getmetoder generiska i datalagret
+        //TODO: get (lambda)
+        //TODO: single (lambda)
+        //TODO: add (lambda)
 }
 
 @* *********************VEHICLES*********************** *@
@@ -59,7 +57,15 @@
                     <input @bind="regNo" type="text" class="form-control" placeholder="Reg No" aria-label="Username" aria-describedby="basic-addon1">
                 </th>
                 <th scope="col">
-                    <input @bind="brand" type="text" class="form-control" placeholder="Brand" aria-label="Username" aria-describedby="basic-addon1">
+                    @* TODO: ta bort: <input @bind="brand" type="text" class="form-control" placeholder="Brand" aria-label="Username" aria-describedby="basic-addon1"> *@
+                    @* Drop-down meny för bil och motorcykelmärken *@
+                    <select @bind="vehicleBrand" class="form-select" aria-label="Default select example">
+                        <option selected></option>
+                        @foreach (var v in bp.GetVehicleBrands())
+                        {
+                            <option>@v</option>
+                        }
+                    </select>
                 </th>
                 <th scope="col">
                     <input @bind="odometer" type="text" class="form-control" placeholder="Odometer" aria-label="Username" aria-describedby="basic-addon1">
@@ -67,6 +73,8 @@
                 <th scope="col">
                     <input @bind="costKm" type="text" class="form-control" placeholder="Cost/km" aria-label="Username" aria-describedby="basic-addon1">
                 </th>
+                
+                @* Drop-down meny för fordonstyper *@
                 <th scope="col">
                     <select @bind="vehicleType" class="form-select" aria-label="Default select example">
                         <option selected></option>
@@ -79,9 +87,10 @@
                 <th scope="col">
                     <input @bind="costDay" type="text" class="form-control" placeholder="$/Day" />
                 </th>
+                @* Knapp som skickar vidare input för att skapa ett nytt fordonsobjekt *@
                 <th scope="col">
                     <button @onclick="() => {
-                    bp.AddVehicle(regNo, brand, odometer, costKm, vehicleType, costDay);
+                    bp.AddVehicle(regNo, vehicleBrand, odometer, costKm, vehicleType, costDay);
                     ClearAllInputValues();
                     }" 
                     type="button" class="btn btn-outline-success">Add Vehicle</button>
@@ -237,6 +246,7 @@
     int odometer;
     double costKm;
     string vehicleType = string.Empty;
+    string vehicleBrand = string.Empty;
     int costDay;
 
     int distance;

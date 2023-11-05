@@ -5,8 +5,10 @@ using Car_Rental.Common.Interfaces;
 using Car_Rental.Data.Interfaces;
 
 using System.Collections.Generic;
+using System.Runtime.ExceptionServices;
 using System.Security.AccessControl;
 using System.Security.Cryptography.X509Certificates;
+using System.Text.RegularExpressions;
 
 namespace Car_Rental.Business.Classes;
 
@@ -43,17 +45,60 @@ public class BookingProcessor
     // Metod som lägger till ny kund
     public void AddCustomer(int ssn, string lastName, string firstName)
     {
-        _db.AddCustomer(new Customer() { Id = _db.NextPersonId, Ssn = ssn, LastName = lastName, FirstName = firstName });
+        ShowErrorMessage = false;
+        try
+        {
+            if (ssn.ToString().Length != 6)
+                throw new InvalidSsnException();
+            else if (lastName == string.Empty || firstName == string.Empty)
+                throw new WhitespaceInputException();
+            else if (!DoesInputContainOnlyLetters(lastName) || !DoesInputContainOnlyLetters(firstName))
+                throw new OnlyLettersException();
+ 
+                _db.AddCustomer(new Customer() { Id = _db.NextPersonId, Ssn = ssn, LastName = lastName, FirstName = firstName });
+        }
+        catch (Exception fel)
+        {
+            ErrorMessage = fel.Message;
+            ShowErrorMessage = true;
+        }
     }
 
     //Metod som lägger till nytt fordon
     public void AddVehicle(string regNo, string brand, int odometer, double costKm, string vehicleType, int costDay)
     {
-        if (vehicleType == "Motorcycle")
+        ShowErrorMessage = false;
+
+        try
         {
-            _db.AddVehicle(new Motorcycle(_db.NextVehicleId, regNo.ToUpper(), brand, odometer, costKm, vehicleType, costDay, VehicleStatuses.Available));
+            // felhantering av input
+            if(!IsRegNoInputCorrect(regNo))
+                throw new RegNumberInputException();
+
+            else if (regNo == string.Empty)
+                throw new WhitespaceInputException();
+            
+            else if (!GetVehicleBrands().Any(b => b == brand))
+                throw new DropdownMenuException();
+
+            else if (odometer < 0 || costKm < 0 || costDay < 0)            
+                throw new NegativeNumberInputException();
+
+            else if (!GetVehicleTypes().Any(b => b == vehicleType))
+                throw new DropdownMenuException();            
+
+            // skapar nytt fordonsobjekt
+            if (vehicleType == Enum.GetName(typeof(VehicleTypes), 1)) //Om det vallda fordonet är en motorcykel
+            {
+                _db.AddVehicle(new Motorcycle(_db.NextVehicleId, regNo.ToUpper(), brand, odometer, costKm, vehicleType, costDay, VehicleStatuses.Available));
+            }
+            _db.AddVehicle(new Car(_db.NextVehicleId, regNo.ToUpper(), brand, odometer, costKm, vehicleType, costDay, VehicleStatuses.Available));
         }
-        _db.AddVehicle(new Car(_db.NextVehicleId, regNo.ToUpper(), brand, odometer, costKm, vehicleType, costDay, VehicleStatuses.Available));
+        catch (Exception e)
+        {
+            ErrorMessage = e.Message;
+            ShowErrorMessage = true;
+        }
     }
     #endregion
 
@@ -70,7 +115,7 @@ public class BookingProcessor
         {
             if (customerId <= 0)
             {
-                throw new InvalidIdException();
+                throw new DropdownMenuException();
             }
             IsBookingProcessing = true;
 
@@ -87,7 +132,7 @@ public class BookingProcessor
 
             IsBookingProcessing = false;
         }
-        catch (InvalidIdException iv)
+        catch (DropdownMenuException iv)
         {
             ErrorMessage = iv.Message;
             ShowErrorMessage = true;
@@ -95,28 +140,6 @@ public class BookingProcessor
         }
     }
 
-    //TODO: ta bort NewBooking (ej asynkron)
-    //public void NewBooking(int vehicleId, int customerId)
-    //{
-    //    try
-    //    {
-    //        // skapar en bokning
-    //        Customer customer = (Customer)_db.GetPersons().First(c => c.Id == customerId);
-    //        _db.AddBooking(new Booking(_db.NextBookingId, _db.GetVehicles().First(v => v.Id == vehicleId), customer, new(2023, 10, 30), VehicleStatuses.Open));
-
-    //        // Ändrar status till Booked för fordonet i Vehicle-lista
-    //        IVehicle updateVehicle = _db.GetVehicles().First(v => v.Id == vehicleId);
-    //        updateVehicle.Status = VehicleStatuses.Booked;
-    //    }
-    //    catch
-    //    {
-    //        return;
-    //    }
-    //}
-
-
-    //TODO odometern fel när jag lämnar tillbaka bilen
-    // (lämna tillbaka fordon) - gör uträkning och ändrar status
     public void ReturnVehicle(int vehicleId, int bookingId, int distance)
     {
         // leta upp fordonets som bokningen gäller, ändra status och odometer
@@ -146,8 +169,6 @@ public class BookingProcessor
         int RentedDays = (int)Math.Round(DifferenceInDays, 0);
         booking.Cost = RentedDays * vehicle.CostDay + (booking.Distance * vehicle.CostKm);
     }
-
-   
     #endregion
 
     #region Metoder som returnerar
@@ -163,7 +184,31 @@ public class BookingProcessor
     public IEnumerable<IBooking> GetBookings() => _db.GetBookings();
 
     //returnerar enums (vehicle types)
-    public string[] GetVehicleTypes() => _db.GetVehicleTypes();
+    public string[] GetVehicleTypes() => Enum.GetNames(typeof(VehicleTypes));
+    public string[] GetVehicleBrands() => Enum.GetNames(typeof(VehicleBrands));
+
+    #endregion
+
+    #region Metoder för felhantering
+    public bool DoesInputContainOnlyLetters(string userInput)
+    {
+        // uttryck (reguljärt) som matchar uteslutande bokstäver (stora eller små).
+        Regex onlyLetters = new Regex("^[a-zA-Z]+$");
+
+        // kontrollerar om strängen från argumentet endast innehåller bokstäver. Returnerar true eller false
+        return onlyLetters.IsMatch(userInput);
+    }
+    static bool IsRegNoInputCorrect(string userInput)
+    {
+        // Skapar ett reguljärt uttryck för 3 bokstäver följt av 3 siffror
+        string pattern = "^[A-Za-z]{3}\\d{3}$";
+
+        // Skapar ett Regex-objekt som tar in mönstret. 
+        Regex regex = new Regex(pattern);
+
+        //Jämför och returnera. 
+        return regex.IsMatch(userInput);
+    }
     #endregion
 
     #endregion METODER REGION ENDS

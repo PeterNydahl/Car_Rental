@@ -12,7 +12,8 @@ public class CollectionData : IData
     readonly List<IVehicle> _vehicles = new List<IVehicle>();
     readonly List<IBooking> _bookings = new List<IBooking>();
 
-    string[] _vehicleTypes = Enum.GetNames(typeof(VehicleTypes));
+    //TODO: ta bort
+    //string[] _vehicleTypes = Enum.GetNames(typeof(VehicleTypes));
 
     public int NextVehicleId => _vehicles.Count.Equals(0) ? 1 : _vehicles.Max(v => v.Id) + 1;
     public int NextPersonId => _persons.Count.Equals(0) ? 1 : _persons.Max(p => p.Id) + 1;
@@ -28,11 +29,11 @@ public class CollectionData : IData
         _persons.Add(new Customer() { Id = NextPersonId, Ssn = 240927, LastName = "Powell", FirstName = "Bud" });
 
         //adding vehicles
-        _vehicles.Add(new Motorcycle(NextVehicleId, "MNO234", "Yamaha", 30000, 0.5, _vehicleTypes[3], 50, VehicleStatuses.Available)); 
-        _vehicles.Add(new Car(NextVehicleId, "ABC123", "Volvo", 10000, 1, _vehicleTypes[1], 200, VehicleStatuses.Available));
-        _vehicles.Add(new Car(NextVehicleId, "DEF456", "Saab", 20000, 1, _vehicleTypes[0], 100, VehicleStatuses.Available));
-        _vehicles.Add(new Car(NextVehicleId, "GHI789", "Tesla", 1000, 3, _vehicleTypes[0], 100, VehicleStatuses.Available)); 
-        _vehicles.Add(new Car(NextVehicleId, "JKL012", "Jeep", 5000, 1.5, _vehicleTypes[2], 300, VehicleStatuses.Available)); 
+        _vehicles.Add(new Motorcycle(NextVehicleId, "MNO234", "Yamaha", 30000, 0.5, Enum.GetName(typeof(VehicleTypes), 4) ,50, VehicleStatuses.Available)); 
+        _vehicles.Add(new Car(NextVehicleId, "ABC123", "Volvo", 10000, 1, Enum.GetName(typeof(VehicleTypes), 2), 200, VehicleStatuses.Available));
+        _vehicles.Add(new Car(NextVehicleId, "DEF456", "Saab", 20000, 1, Enum.GetName(typeof(VehicleTypes), 1), 100, VehicleStatuses.Available));
+        _vehicles.Add(new Car(NextVehicleId, "GHI789", "Tesla", 1000, 3, Enum.GetName(typeof(VehicleTypes), 1), 100, VehicleStatuses.Available)); 
+        _vehicles.Add(new Car(NextVehicleId, "JKL012", "Jeep", 5000, 1.5, Enum.GetName(typeof(VehicleTypes), 3), 300, VehicleStatuses.Available)); 
     }
 
     #region ********* METODER *********
@@ -56,7 +57,7 @@ public class CollectionData : IData
     public IEnumerable<IPerson> GetPersons() => _persons;
     public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _vehicles;
     public IEnumerable<IBooking> GetBookings() => _bookings;
-    public string[] GetVehicleTypes() => _vehicleTypes;   
+    //TODO ta bort: public string[] GetVehicleTypes() => _vehicleTypes;   
     #endregion
 
     #endregion REGION METODER ENDS

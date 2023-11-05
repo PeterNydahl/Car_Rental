@@ -7,7 +7,7 @@ public class Motorcycle : IVehicle
 {
     public int Id { get; init; }
     public string? RegNo { get; init; }
-    public string? Brand { get; init; }
+    public string Brand { get; init; }
     public int Odometer { get; set; }
 
     public double CostKm { get; init; }

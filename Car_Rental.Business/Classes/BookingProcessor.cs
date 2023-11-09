@@ -104,17 +104,14 @@ public class BookingProcessor
     #endregion
 
     #region Metoder som sköter bokningar
-    // TODO ta bort gammal kod 
-    //public async Task<Customer> GetCustomerAsync(int customerId) =>
-    //    await Task.Run(() => (Customer)_db.GetPersons().First(c => c.Id == customerId));
 
-    //Lägg till single istället
+    //Asynkrona metoder som hämtar kund och fordon till bokning
     public async Task<Customer> GetCustomerAsync(int customerId) =>
-    await Task.Run(() => (Customer)_db.GetPersons().First(c => c.Id == customerId));
+    await Task.Run(() => (Customer)_db.Single<IPerson>(c => c.Id == customerId));
 
-    // lägg till single
     public async Task<IVehicle> GetVehicleAsync(int vehicleId) =>
-        await Task.Run(() => _db.GetVehicles().First(v => v.Id == vehicleId));
+        await Task.Run(() => _db.Single<IVehicle>(v => v.Id == vehicleId));
+    //Asynkron metod som skapar ny bokning
     public async Task NewBookingAsync(int vehicleId, int customerId)
     {
         ShowErrorMessage = false;
@@ -127,15 +124,14 @@ public class BookingProcessor
             }
             IsBookingProcessing = true;
 
-            // hämtar kund genom asynkron metod
             await Task.Delay(1000);
             Customer customer = await GetCustomerAsync(customerId);
             // skapar en bokning
             _db.AddBooking(new Booking(_db.NextBookingId, _db.GetVehicles().First(v => v.Id == vehicleId), customer, new(2023, 11, 01), VehicleStatuses.Open));
 
-            // hämtar fordon med asynkron metod
+            // hämtar fordon
             IVehicle updateVehicle = await GetVehicleAsync(vehicleId);
-            // Ändrar status till Booked för fordonet i Vehicle-lista
+            // Ändrar status för fordonet i Vehicle-lista
             updateVehicle.Status = VehicleStatuses.Booked;
 
             IsBookingProcessing = false;
@@ -150,12 +146,12 @@ public class BookingProcessor
     public void ReturnVehicle(int vehicleId, int bookingId, int distance)
     {
         // leta upp fordonets som bokningen gäller, ändra status och odometer
-        IVehicle? vehicle = _db.GetVehicles().First(v => v.Id == vehicleId); 
+        IVehicle? vehicle = _db.Single<IVehicle>(v => v.Id == vehicleId); 
         vehicle.Status = VehicleStatuses.Available;
         vehicle.Odometer += distance;
 
         //leta upp bokningen som ska avslutas och ändra status
-        IBooking? booking = _db.GetBookings().First(b => b.Id == bookingId);
+        IBooking? booking = _db.Single<IBooking>(b => b.Id == bookingId);
         booking.Status = VehicleStatuses.Closed;
 
         // Gör uträkningar
@@ -186,8 +182,9 @@ public class BookingProcessor
     // returnerar bokningar
     public IEnumerable<IBooking> GetBookings() => _db.Get<IBooking>(x => true);
 
+
     // returnerar bokning
-    public IBooking GetBooking(string regNo) => _db.GetBookings().First(b => b.RegNo.Equals(regNo) && b.Status == VehicleStatuses.Open);
+    public IBooking GetBooking(string regNo) => _db.Single<IBooking>(b => b.RegNo.Equals(regNo) && b.Status == VehicleStatuses.Open);
 
 
     //returnerar enums (vehicle types)
@@ -227,4 +224,8 @@ public class BookingProcessor
     //public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _db.GetVehicles();
     // returnerar bokningar (gammal)
     //public IEnumerable<IBooking> GetBookings() => _db.GetBookings();
+    // returnerar bokning (gammal)
+    //public IBooking GetBooking(string regNo) => _db.GetBookings().First(b => b.RegNo.Equals(regNo) && b.Status == VehicleStatuses.Open);
+
+
 }

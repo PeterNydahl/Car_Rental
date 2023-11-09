@@ -19,22 +19,6 @@ public class CollectionData : IData
     readonly List<IVehicle> _vehicles = new List<IVehicle>();
     readonly List<IBooking> _bookings = new List<IBooking>();
 
-    //Generisk reflection-metod som returnerar listor
-    public List<T> Get<T>(Func<T, bool> expression) where T : class
-    {
-        // Sök reda på "blueprinten" av en egenskap(här en lista) av datatypen T 
-        var propList = GetType() // Kollar "Blueprint", vad objektet har för egenskaper och metoder
-            .GetFields(BindingFlags.NonPublic | BindingFlags.Instance) //GetFields sorterar ut egenskaperna. BindingFlags = flaggar villkor för det som ska hämtas ut
-            .FirstOrDefault(x => x.FieldType == typeof(List<T>) && x.IsInitOnly) //filtrera ut den lista som är av datatypen “T” samt är initierad 
-            ?? throw new InvalidOperationException("Invalid datatype"); // Om ingen lista finns av angiven datatyp - kasta ett felmeddelande
-        // Hämta listans data
-        var propListContent = propList.GetValue(this) //sparar värdet i listan i ny variabel. I parametern anges objektet som datat hämtas ifrån, i detta fall det objekt vi befinner oss i, därav "this"
-            ?? throw new Exception("List content was null!");
-        var returLista = ((List<T>)propListContent).AsQueryable(); // AsQuerable möjliggör användning linq (datat hämtas allterftersom det filtreras) 
-
-        if (expression == null) return returLista.ToList(); // returnera hela listan om sökresultatet är null
-        return returLista.Where(expression).ToList(); // returnera listan filtrerad lambdauttrycket i metdens parameter
-    }
 
     public int NextVehicleId => _vehicles.Count.Equals(0) ? 1 : _vehicles.Max(v => v.Id) + 1;
     public int NextPersonId => _persons.Count.Equals(0) ? 1 : _persons.Max(p => p.Id) + 1;
@@ -76,11 +60,45 @@ public class CollectionData : IData
 
     #region Metoder som returnerar data
 
-public IEnumerable<IPerson> GetPersons() => _persons;
-public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _vehicles;
-public IEnumerable<IBooking> GetBookings() => _bookings;
-    
+    //Metod (generisk) som returnerar lista
+    public List<T> Get<T>(Func<T, bool> expression) where T : class
+    {
+        // Sök reda på "blueprinten" av en egenskap(här en lista) av datatypen T 
+        var propList = GetType() // Kollar "Blueprint", vad objektet har för egenskaper och metoder
+            .GetFields(BindingFlags.NonPublic | BindingFlags.Instance) //GetFields sorterar ut egenskaperna. BindingFlags = flaggar villkor för det som ska hämtas ut
+            .FirstOrDefault(x => x.FieldType == typeof(List<T>) && x.IsInitOnly) //filtrera ut den lista som är av datatypen “T” samt är initierad 
+            ?? throw new InvalidOperationException("Invalid datatype"); // Om ingen lista finns av angiven datatyp - kasta ett felmeddelande
+        // Hämta listans data
+        var propListContent = propList.GetValue(this) //sparar värdet i listan i ny variabel. I parametern anges objektet som datat hämtas ifrån, i detta fall det objekt vi befinner oss i, därav "this"
+            ?? throw new Exception("List content was null!");
+        var returLista = ((List<T>)propListContent).AsQueryable(); // AsQuerable möjliggör användning linq (datat hämtas allterftersom det filtreras) 
+
+        if (expression == null) return returLista.ToList(); // returnera hela listan om sökresultatet är null
+        return returLista.Where(expression).ToList(); // returnera listan filtrerad lambdauttrycket i metdens parameter
+    }
+
+    public T Single<T>(Func<T, bool> expression) where T : class
+    {
+        // Sök reda på "blueprinten" av en egenskap(här en lista) av datatypen T 
+        var propList = GetType() // Kollar "Blueprint", vad objektet har för egenskaper och metoder
+            .GetFields(BindingFlags.NonPublic | BindingFlags.Instance) //GetFields sorterar ut egenskaperna. BindingFlags = flaggar villkor för det som ska hämtas ut
+            .FirstOrDefault(x => x.FieldType == typeof(List<T>) && x.IsInitOnly) //filtrera ut den lista som är av datatypen “T” samt är initierad 
+            ?? throw new InvalidOperationException("Invalid datatype"); // Om ingen lista finns av angiven datatyp - kasta ett felmeddelande
+        // Hämta listans data
+        var propListContent = propList.GetValue(this) //sparar värdet i listan i ny variabel. I parametern anges objektet som datat hämtas ifrån, i detta fall det objekt vi befinner oss i, därav "this"
+            ?? throw new Exception("List content was null!");
+        var lista = ((List<T>)propListContent).AsQueryable(); // AsQuerable möjliggör användning linq (datat hämtas allterftersom det filtreras) 
+
+        if (expression == null) throw new Exception("No item was found!"); ; // returnera hela listan om sökresultatet är null
+        return lista.Single(expression); // returnera listan filtrerad lambdauttrycket i metdens parameter
+    }
+
     #endregion
 
     #endregion REGION METODER ENDS
+
+    // TODO: ta bort kod 
+    public IEnumerable<IPerson> GetPersons() => _persons;
+    public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _vehicles;
+    public IEnumerable<IBooking> GetBookings() => _bookings;
 }

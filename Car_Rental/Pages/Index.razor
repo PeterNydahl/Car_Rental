@@ -8,11 +8,11 @@
 
 @{
     //STYLING, ATT GÖRA SENARE
-    //TODO: lägg till en föräldra-div till allt för att kunna kontrollera storlek på child-divs.
     //TODO: undersök drop down menyn
     //TODO: förläng delay
+    //TODO: exception för långa nummer
 
-    //TOTO: gör alla getmetoder generiska i datalagret
+    //TODO: gör alla getmetoder generiska i datalagret
         //TODO: get (lambda)
         //TODO: single (lambda)
         //TODO: add (lambda)
@@ -23,7 +23,7 @@
 }
 
 @* *********************VEHICLES*********************** *@
-<div class="container @(bp.IsBookingProcessing? "unclickable" : "")">
+<div class="container  @(bp.IsBookingProcessing? "unclickable" : "")">
     
     @* visar meddelande när fel uppstår *@
     @if (bp.ShowErrorMessage)

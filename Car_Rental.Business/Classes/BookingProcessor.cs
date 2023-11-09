@@ -4,6 +4,7 @@ using Car_Rental.Common.Exceptions;
 using Car_Rental.Common.Extensions;
 using Car_Rental.Common.Interfaces;
 using Car_Rental.Data.Interfaces;
+using Car_Rental.Data.Classes;
 
 using System.Collections.Generic;
 using System.Runtime.ExceptionServices;
@@ -18,7 +19,6 @@ public class BookingProcessor
     #region ************* FÄLT & EGENSKAPER *************
 
     readonly IData _db;
-
     public bool IsBookingProcessing { get; set; }
 
     public string ErrorMessage { get; set; } = string.Empty;
@@ -104,8 +104,15 @@ public class BookingProcessor
     #endregion
 
     #region Metoder som sköter bokningar
+    // TODO ta bort gammal kod 
+    //public async Task<Customer> GetCustomerAsync(int customerId) =>
+    //    await Task.Run(() => (Customer)_db.GetPersons().First(c => c.Id == customerId));
+
+    //Lägg till single istället
     public async Task<Customer> GetCustomerAsync(int customerId) =>
-        await Task.Run(() => (Customer)_db.GetPersons().First(c => c.Id == customerId));
+    await Task.Run(() => (Customer)_db.GetPersons().First(c => c.Id == customerId));
+
+    // lägg till single
     public async Task<IVehicle> GetVehicleAsync(int vehicleId) =>
         await Task.Run(() => _db.GetVehicles().First(v => v.Id == vehicleId));
     public async Task NewBookingAsync(int vehicleId, int customerId)
@@ -169,16 +176,19 @@ public class BookingProcessor
     #endregion
 
     #region Metoder som hämtar och returnerar data
-    // returnerar kunder 
-    public IEnumerable<Customer> GetCustomers() => _db.GetPersons().Cast<Customer>();
 
-    // returnerar fordon
-    public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _db.GetVehicles();
+    // returnerar kunder
+    public IEnumerable<Customer> GetCustomers() => _db.Get<IPerson>(x => true).Cast<Customer>();
 
-    // returnerar bokning, bokningar
+    // returnerar fordon 
+    public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _db.Get<IVehicle>(x => true);
+
+    // returnerar bokningar
+    public IEnumerable<IBooking> GetBookings() => _db.Get<IBooking>(x => true);
+
+    // returnerar bokning
     public IBooking GetBooking(string regNo) => _db.GetBookings().First(b => b.RegNo.Equals(regNo) && b.Status == VehicleStatuses.Open);
-    
-    public IEnumerable<IBooking> GetBookings() => _db.GetBookings();
+
 
     //returnerar enums (vehicle types)
     public string[] GetVehicleTypes() => Enum.GetNames(typeof(VehicleTypes));
@@ -209,4 +219,12 @@ public class BookingProcessor
     #endregion
 
     #endregion METODER REGION ENDS
+
+    //TODO: ta bort kod
+    // returnerar kunder (gammal)
+    //public IEnumerable<Customer> GetCustomers() => _db.GetPersons().Cast<Customer>();
+    // returnerar fordon (gammal)
+    //public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _db.GetVehicles();
+    // returnerar bokningar (gammal)
+    //public IEnumerable<IBooking> GetBookings() => _db.GetBookings();
 }

@@ -55,7 +55,9 @@ public class BookingProcessor
                 throw new WhitespaceInputException();
             else if (!DoesInputContainOnlyLetters(lastName) || !DoesInputContainOnlyLetters(firstName))
                 throw new OnlyLettersException();
- 
+            else if (_db.Get<IPerson>(x => true).Any(p => p.Ssn == ssn))
+                throw new SsnAlreadyExistsException();
+
                 _db.Add<IPerson>(new Customer() { Id = _db.NextPersonId, Ssn = ssn, LastName = lastName, FirstName = firstName });
         }
         catch (Exception fel)
@@ -91,15 +93,14 @@ public class BookingProcessor
             else if (odometer > int.MaxValue || costKm > double.MaxValue || costDay > int.MaxValue)
                 throw new InputValueTooBigException();
 
-            else if (_db.Get<IVehicle>(v => true).Any(v => v.RegNo == regNo))
+            else if (_db.Get<IVehicle>(v => true).Any(v => v.RegNo == regNo.ToUpper()))
                 throw new RegNoAlreadyExistsException();
 
             // skapar nytt fordonsobjekt
             if (vehicleType == Enum.GetName(typeof(VehicleTypes), 1)) //Om det vallda fordonet är en motorcykel
-            {
-                _db.AddVehicle(new Motorcycle(_db.NextVehicleId, regNo.ToUpper(), brand, odometer, costKm, vehicleType, costDay, VehicleStatuses.Available));
-            }
-            _db.AddVehicle(new Car(_db.NextVehicleId, regNo.ToUpper(), brand, odometer, costKm, vehicleType, costDay, VehicleStatuses.Available));
+                _db.Add<IVehicle>(new Motorcycle(_db.NextVehicleId, regNo.ToUpper(), brand, odometer, costKm, vehicleType, costDay, VehicleStatuses.Available));
+            else
+                _db.Add<IVehicle>(new Car(_db.NextVehicleId, regNo.ToUpper(), brand, odometer, costKm, vehicleType, costDay, VehicleStatuses.Available));
         }
         catch (Exception e)
         {
@@ -134,7 +135,7 @@ public class BookingProcessor
             await Task.Delay(1000);
             Customer customer = await GetCustomerAsync(customerId);
             // skapar en bokning
-            _db.AddBooking(new Booking(_db.NextBookingId, _db.GetVehicles().First(v => v.Id == vehicleId), customer, new(2023, 11, 01), VehicleStatuses.Open));
+            _db.Add<IBooking>(new Booking(_db.NextBookingId, _db.Single<IVehicle>(v => v.Id == vehicleId), customer, new(2023, 11, 01), VehicleStatuses.Open));
 
             // hämtar fordon
             IVehicle updateVehicle = await GetVehicleAsync(vehicleId);

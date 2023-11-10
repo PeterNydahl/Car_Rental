@@ -23,9 +23,7 @@ public class CollectionData : IData
     public int NextPersonId => _persons.Count.Equals(0) ? 1 : _persons.Max(p => p.Id) + 1;
     public int NextBookingId => _bookings.Count.Equals(0) ? 1 : _bookings.Max(b => b.Id) + 1;
 
-    public CollectionData() => SeedData();
-
-    // Lägger till data till listorna
+    public CollectionData() => SeedData(); //när klassen instansieras anropas här via konstruktorn SeedData() som sätter initiala värden
     void SeedData()
     {
         //adding cutomers
@@ -41,25 +39,6 @@ public class CollectionData : IData
     }
 
     #region ********* METODER *********
-
-    #region Metoder som lägger till data
-    public void AddBooking(IBooking newBooking)
-    {
-        _bookings.Add(newBooking);
-    }
-    public void AddCustomer(Customer newCustomer)
-    {
-        _persons.Add(newCustomer);
-    }
-    public void AddVehicle(IVehicle newVehicle)
-    {
-        _vehicles.Add(newVehicle);
-    }
-    #endregion
-
-    #region Metoder som returnerar data
-
-    //Returnerar lista
 
     public T Single<T>(Func<T, bool> expression) where T : class
     {
@@ -89,8 +68,6 @@ public class CollectionData : IData
         if (expression == null) return returLista.ToList(); // returnera hela listan om sökresultatet är null
         return returLista.Where(expression).ToList(); // returnera listan filtrerad lambdauttrycket i metdens parameter
     }
-
-    // Lägger till i lista
     public void Add<T>(T item) where T : class
     {
         //TODO: ta bort kommentarer
@@ -103,12 +80,6 @@ public class CollectionData : IData
         list.Add(item); //uppdaterar temporär lista
         propList.SetValue(this, list); //uppdaterar den "riktiga" listan
     }
+    
     #endregion
-
-        #endregion REGION METODER ENDS
-
-        // TODO: ta bort kod 
-        public IEnumerable<IPerson> GetPersons() => _persons;
-    public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _vehicles;
-    public IEnumerable<IBooking> GetBookings() => _bookings;
 }

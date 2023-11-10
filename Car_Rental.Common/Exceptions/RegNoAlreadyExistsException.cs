@@ -3,6 +3,6 @@
     public class RegNoAlreadyExistsException : Exception
     {
         public override string Message =>
-            "The registration number already exists. Please try again.";
+            "Registration number already exists. Please try again.";
     }
 }

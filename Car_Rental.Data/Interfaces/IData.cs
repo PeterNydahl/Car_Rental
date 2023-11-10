@@ -9,13 +9,13 @@ public interface IData
     public int NextPersonId { get; }
     public int NextBookingId { get; }
 
-    
-    public void AddBooking(IBooking newBooking);
-    public void AddCustomer(Customer newCustomer);
-    public void AddVehicle(IVehicle vehicle);
-    IEnumerable<IPerson> GetPersons();
-    IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default);
-    IEnumerable<IBooking> GetBookings();
+    //TODO ta bort
+    //public void AddBooking(IBooking newBooking);
+    //public void AddCustomer(Customer newCustomer);
+    //public void AddVehicle(IVehicle vehicle);
+    //IEnumerable<IPerson> GetPersons();
+    //IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default);
+    //IEnumerable<IBooking> GetBookings();
 
     public List<T> Get<T>(Func<T, bool> expression) where T : class;
 

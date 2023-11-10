@@ -103,7 +103,6 @@
                     }
                 </th>
             </tr>
-
             @*Läser in och visar urvalet av bilar*@
             @foreach (var vehicle in bp.GetVehicles())
             {
@@ -147,7 +146,6 @@
                     </td>
                 </tr>
             }
-        
         </tbody>
     </table>
 </div>
@@ -189,7 +187,6 @@
                             : "badge bg-success text-light")">@b.Status</span>
                     </td>
                 </tr>
-                
             }
         </tbody>
     </table>
@@ -233,11 +230,6 @@
 </div>
 
 @code{
-    //TODO ta bort slaskvariabler och metoder
-    //SLASK START
-
-    //SLASK END
-
     int ssn;
     string lastName = string.Empty;
     string firstName = string.Empty;

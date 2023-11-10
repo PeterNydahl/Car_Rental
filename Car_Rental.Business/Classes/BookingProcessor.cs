@@ -192,8 +192,8 @@ public class BookingProcessor
     public IBooking GetBooking(string regNo) => _db.Single<IBooking>(b => b.RegNo.Equals(regNo) && b.Status == VehicleStatuses.Open);
 
     //returnerar enums (vehicle types)
-    public string[] GetVehicleTypes() => Enum.GetNames(typeof(VehicleTypes));
-    public string[] GetVehicleBrands() => Enum.GetNames(typeof(VehicleBrands));
+    public string[] GetVehicleTypes() => _db.GetVehicleTypes();
+    public string[] GetVehicleBrands() => _db.GetVehicleBrands();
 
     #endregion
 

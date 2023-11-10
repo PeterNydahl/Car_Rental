@@ -56,7 +56,7 @@ public class BookingProcessor
             else if (!DoesInputContainOnlyLetters(lastName) || !DoesInputContainOnlyLetters(firstName))
                 throw new OnlyLettersException();
  
-                _db.AddCustomer(new Customer() { Id = _db.NextPersonId, Ssn = ssn, LastName = lastName, FirstName = firstName });
+                _db.Add<IPerson>(new Customer() { Id = _db.NextPersonId, Ssn = ssn, LastName = lastName, FirstName = firstName });
         }
         catch (Exception fel)
         {
@@ -73,20 +73,26 @@ public class BookingProcessor
         try
         {
             // felhantering av input
-            if(!IsRegNoInputCorrect(regNo))
+            if (!IsRegNoInputCorrect(regNo))
                 throw new RegNumberInputException();
 
             else if (regNo == string.Empty)
                 throw new WhitespaceInputException();
-            
+
             else if (!GetVehicleBrands().Any(b => b == brand))
                 throw new DropdownMenuException();
 
-            else if (odometer < 0 || costKm < 0 || costDay < 0)            
+            else if (odometer < 0 || costKm < 0 || costDay < 0)
                 throw new NegativeNumberInputException();
 
             else if (!GetVehicleTypes().Any(b => b == vehicleType))
-                throw new DropdownMenuException();            
+                throw new DropdownMenuException();
+
+            else if (odometer > int.MaxValue || costKm > double.MaxValue || costDay > int.MaxValue)
+                throw new InputValueTooBigException();
+
+            else if (_db.Get<IVehicle>(v => true).Any(v => v.RegNo == regNo))
+                throw new RegNoAlreadyExistsException();
 
             // skapar nytt fordonsobjekt
             if (vehicleType == Enum.GetName(typeof(VehicleTypes), 1)) //Om det vallda fordonet är en motorcykel
@@ -111,6 +117,7 @@ public class BookingProcessor
 
     public async Task<IVehicle> GetVehicleAsync(int vehicleId) =>
         await Task.Run(() => _db.Single<IVehicle>(v => v.Id == vehicleId));
+
     //Asynkron metod som skapar ny bokning
     public async Task NewBookingAsync(int vehicleId, int customerId)
     {
@@ -216,16 +223,4 @@ public class BookingProcessor
     #endregion
 
     #endregion METODER REGION ENDS
-
-    //TODO: ta bort kod
-    // returnerar kunder (gammal)
-    //public IEnumerable<Customer> GetCustomers() => _db.GetPersons().Cast<Customer>();
-    // returnerar fordon (gammal)
-    //public IEnumerable<IVehicle> GetVehicles(VehicleStatuses status = default) => _db.GetVehicles();
-    // returnerar bokningar (gammal)
-    //public IEnumerable<IBooking> GetBookings() => _db.GetBookings();
-    // returnerar bokning (gammal)
-    //public IBooking GetBooking(string regNo) => _db.GetBookings().First(b => b.RegNo.Equals(regNo) && b.Status == VehicleStatuses.Open);
-
-
 }

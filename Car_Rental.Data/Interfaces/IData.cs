@@ -20,4 +20,6 @@ public interface IData
     public List<T> Get<T>(Func<T, bool> expression) where T : class;
 
     public T Single<T>(Func<T, bool> expression) where T : class;
+
+    public void Add<T>(T item) where T : class;
     }

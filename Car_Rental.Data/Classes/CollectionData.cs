@@ -38,8 +38,6 @@ public class CollectionData : IData
         _vehicles.Add(new Car(NextVehicleId, "JKL012", "Jeep", 5000, 1.5, Enum.GetName(typeof(VehicleTypes), 3), 300, VehicleStatuses.Available)); 
     }
 
-    #region ********* METODER *********
-
     public T Single<T>(Func<T, bool> expression) where T : class
     {
         var propList = GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance) 
@@ -80,6 +78,4 @@ public class CollectionData : IData
         list.Add(item); //uppdaterar temporär lista
         propList.SetValue(this, list); //uppdaterar den "riktiga" listan
     }
-    
-    #endregion
 }

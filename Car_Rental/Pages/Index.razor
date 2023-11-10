@@ -3,27 +3,10 @@
 @using Car_Rental.Common.Enums;
 @inject BookingProcessor bp;
 
-<PageTitle>Car Rental</PageTitle>
-
-
-@{
-    //STYLING, ATT GÖRA SENARE
-    //TODO: undersök drop down menyn
-    //TODO: förläng delay
-    //TODO: exception för långa nummer
-
-    //TODO: gör alla getmetoder generiska i datalagret
-        //TODO: get (lambda)
-        //TODO: single (lambda)
-        //TODO: add (lambda)
-
-    //DONE: dubbelkolla att uträkningen är korrekt. Ändra datum
-    //DONE: lägg till ett arv. Gör IVehicle till en klass som car och motorcycle ärver ifrån. Lägg gemensam metodfunktionaliet i basklassen.
-    //DONE: lägg till en extension metod. Common/Extensions/VehicleExtension.cs/Duration(this DateTime StartDate, DateTime EndDate)
-}
+<PageTitle>Nydahls Bilar</PageTitle>
 
 @* *********************VEHICLES*********************** *@
-<div class="container  @(bp.IsBookingProcessing? "unclickable" : "")">
+<div class="container @(bp.IsBookingProcessing? "unclickable" : "")">
     
     @* visar meddelande när fel uppstår *@
     @if (bp.ShowErrorMessage)
@@ -251,7 +234,6 @@
 
     int selectedCustomerId;
     
-    // TODO kolla in try parse och varför det inte går att casta direkt till en int
     private void HandleCustomerSelection(ChangeEventArgs e)
     {
         if (int.TryParse(e.Value.ToString(), out int customerId))

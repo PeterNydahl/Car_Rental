@@ -6,13 +6,9 @@ public interface IVehicle
     public int Id { get; init; }   
     public string? RegNo { get; init; }
     public string Brand { get; init; }
-
     public int Odometer { get; set; }
-
     public double CostKm { get; init; }
     public string VehicleType { get; init; }
-
     public int CostDay { get; set; }
-
     public VehicleStatuses Status { get; set; }
 }

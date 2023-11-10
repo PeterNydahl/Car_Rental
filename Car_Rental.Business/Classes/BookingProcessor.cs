@@ -24,8 +24,6 @@ public class BookingProcessor
     public string ErrorMessage { get; set; } = string.Empty;
     public bool ShowErrorMessage { get; set; }
 
-    //public VehicleTypes[] VehicleTypes { get; init; }
-
     #endregion
 
     #region ************* KONSTRUKTOR *************
@@ -42,7 +40,7 @@ public class BookingProcessor
 
     #region ************* METODER *************
 
-    #region Metoder som lägger till kund, fordon
+    #region Metoder som lägger till kund & fordon
     // Metod som lägger till ny kund
     public void AddCustomer(int ssn, string lastName, string firstName)
     {
@@ -97,7 +95,7 @@ public class BookingProcessor
                 throw new RegNoAlreadyExistsException();
 
             // skapar nytt fordonsobjekt
-            if (vehicleType == Enum.GetName(typeof(VehicleTypes), 1)) //Om det vallda fordonet är en motorcykel
+            if (vehicleType == Enum.GetName(typeof(VehicleTypes), 1))
                 _db.Add<IVehicle>(new Motorcycle(_db.NextVehicleId, regNo.ToUpper(), brand, odometer, costKm, vehicleType, costDay, VehicleStatuses.Available));
             else
                 _db.Add<IVehicle>(new Car(_db.NextVehicleId, regNo.ToUpper(), brand, odometer, costKm, vehicleType, costDay, VehicleStatuses.Available));
@@ -132,7 +130,7 @@ public class BookingProcessor
             }
             IsBookingProcessing = true;
 
-            await Task.Delay(1000);
+            await Task.Delay(8000);
             Customer customer = await GetCustomerAsync(customerId);
             // skapar en bokning
             _db.Add<IBooking>(new Booking(_db.NextBookingId, _db.Single<IVehicle>(v => v.Id == vehicleId), customer, new(2023, 11, 01), VehicleStatuses.Open));
@@ -190,10 +188,8 @@ public class BookingProcessor
     // returnerar bokningar
     public IEnumerable<IBooking> GetBookings() => _db.Get<IBooking>(x => true);
 
-
     // returnerar bokning
     public IBooking GetBooking(string regNo) => _db.Single<IBooking>(b => b.RegNo.Equals(regNo) && b.Status == VehicleStatuses.Open);
-
 
     //returnerar enums (vehicle types)
     public string[] GetVehicleTypes() => Enum.GetNames(typeof(VehicleTypes));
